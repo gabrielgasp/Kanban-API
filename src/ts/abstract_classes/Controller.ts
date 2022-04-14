@@ -25,4 +25,10 @@ export abstract class Controller<T> implements IController {
     if (!result) return res.status(404).json({ message: 'Task not found' })
     return res.status(200).json(result)
   }
+
+  public async delete (req: Request, res: Response): Promise<Response> {
+    const result = await this.service.delete(req.params.id)
+    if (!result) return res.status(404).json({ message: 'Task not found' })
+    return res.status(200).json(result)
+  }
 }
