@@ -7,6 +7,8 @@ const app: Express = express() // Initialize express app
 
 app.use(express.json()) // Parse all JSON in incoming requests so they can be used as JS objects
 
+app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // API Healthcheck endpoint
+
 app.use(errorHandler) // Receive errors when next(error) is called
 
 export { app } // Export the app so it can be used in tests and the in the server.ts file
