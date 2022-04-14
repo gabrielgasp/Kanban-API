@@ -29,7 +29,7 @@ export default {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "src/server.ts",
-    "src/ts",
+    "src/ts/interfaces",
   ],
 
   // Indicates which provider should be used to instrument code for coverage
