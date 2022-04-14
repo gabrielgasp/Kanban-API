@@ -14,7 +14,7 @@ export abstract class Repository<T> implements IRepository<T> {
     return await this.model.find()
   }
 
-  public async update (id: string, data: T): Promise<T | null> {
+  public async update (id: string, data: Partial<T>): Promise<T | null> {
     return await this.model.findByIdAndUpdate(id, data, { new: true })
   }
 
