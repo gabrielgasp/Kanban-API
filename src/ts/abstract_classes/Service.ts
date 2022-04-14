@@ -1,5 +1,8 @@
 import { IService, IRepository } from '../interfaces'
 
+// Service is where we put all our business logic.
+// It can be considered a middle-ground where we don't have to worry about
+// how we read/write things to the database or how we receive/respond http requests.
 export abstract class AbstractService<T> implements IService<T> {
   constructor (
     protected readonly repository: IRepository<T>
