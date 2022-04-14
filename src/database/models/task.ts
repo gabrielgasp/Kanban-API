@@ -5,7 +5,7 @@ interface TaskDocument extends ITask, mongoose.Document {}
 
 const taskSchema = new mongoose.Schema<TaskDocument>({
   boardId: { type: Number, required: true }, // This type would probably be changed to ObjectId if we have a "boards" collection
-  status: { type: String, required: true },
+  status: { type: String, required: true }, // This represents the column ex: "BACKLOG" | "IN_PROGRESS" | "DONE", etc.
   title: { type: String, required: true },
   description: { type: String, required: true },
   members: { type: [String], required: true }, // This type would probably be changed to ObjectId if we have a "users" collection
