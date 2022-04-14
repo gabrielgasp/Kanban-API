@@ -1,6 +1,10 @@
 import { Model, Document } from 'mongoose'
 import { IRepository } from '../interfaces'
 
+// Repository is where we abstract our database interactions.
+// This allow us to use the same code for different database systems.
+// As long as we respect the contract (T interface), we can easily change
+// the database (or ORM/ODM) we use.
 export abstract class Repository<T> implements IRepository<T> {
   constructor (
     protected readonly model: Model<T & Document>
