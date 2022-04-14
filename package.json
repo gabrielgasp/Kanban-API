@@ -2,10 +2,18 @@
   "name": "mamboo-kanban-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/server.js",
   "scripts": {
-    "test:staged": "",
-    "lint": "eslint src/** --ext .ts --fix --no-error-on-unmatched-pattern"
+    "test": "jest --maxWorkers=50% --passWithNoTests --silent --noStackTrace",
+    "test:verbose": "jest --runInBand --verbose --noStackTrace",
+    "test:unit": "npm test -- -c jest-unit-config.ts",
+    "test:integration": "npm test -- -c jest-integration-config.ts",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:coverage": "npm test -- --coverage",
+    "test:ci": "jest --coverage --runInBand --verbose --silent --noStackTrace",
+    "lint": "eslint src/** --ext .ts --fix --no-error-on-unmatched-pattern",
+    "build": "tsc --build tsconfig.build.json",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
