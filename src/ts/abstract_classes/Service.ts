@@ -1,6 +1,6 @@
-import { IRepository } from '../interfaces'
+import { IService, IRepository } from '../interfaces'
 
-export abstract class AbstractService<T> {
+export abstract class AbstractService<T> implements IService<T> {
   constructor (
     protected readonly repository: IRepository<T>
   ) {}
