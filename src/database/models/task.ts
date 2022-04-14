@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
 import { ITask } from '../../ts/interfaces'
 
-const taskSchema = new mongoose.Schema<ITask>({
+interface TaskDocument extends ITask, mongoose.Document {}
+
+const taskSchema = new mongoose.Schema<TaskDocument>({
   boardId: { type: Number, required: true }, // This type would probably be changed to ObjectId if we have a "boards" collection
   status: { type: String, required: true },
   title: { type: String, required: true },
@@ -14,4 +16,4 @@ const taskSchema = new mongoose.Schema<ITask>({
   versionKey: false
 })
 
-export const taskModel = mongoose.model<ITask>('Task', taskSchema)
+export const taskModel = mongoose.model('Task', taskSchema)
