@@ -12,4 +12,7 @@ export class MockTasksRepository extends TasksRepository {
   // and turn them into empty mocks.
 
   public create = jest.fn()
+  public read = jest.fn()
+  public update = jest.fn()
+  public delete = jest.fn()
 }
