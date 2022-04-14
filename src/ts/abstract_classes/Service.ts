@@ -12,4 +12,8 @@ export abstract class AbstractService<T> implements IService<T> {
   public async read (): Promise<T[]> {
     return await this.repository.read()
   }
+
+  public async update (id: string, data: Partial<T>): Promise<T | null> {
+    return await this.repository.update(id, data)
+  }
 }
