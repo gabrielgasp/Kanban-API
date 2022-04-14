@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/GabrielGaspar447/Mamboo-Kanban-API/issues"
   },
-  "homepage": "https://github.com/GabrielGaspar447/Mamboo-Kanban-API#readme"
+  "homepage": "https://github.com/GabrielGaspar447/Mamboo-Kanban-API#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^4.1.1"
+  }
 }
