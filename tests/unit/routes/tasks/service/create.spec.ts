@@ -14,7 +14,7 @@ const fakeTask = {
 }
 
 describe("TasksService create method unit tests", () => {
-  beforeAll(() => { // mock the return value of the taskRepository.create method
+  beforeAll(() => { // mock the return value of the tasksRepository.create method
     mockTasksRepository.create = jest.fn().mockResolvedValue({ ...fakeTask, _id: 'test' })
   })
 

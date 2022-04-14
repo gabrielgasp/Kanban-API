@@ -8,4 +8,8 @@ export abstract class AbstractService<T> implements IService<T> {
   public async create (data: T): Promise<T> {
     return await this.repository.create(data)
   }
+
+  public async read (): Promise<T[]> {
+    return await this.repository.read()
+  }
 }
