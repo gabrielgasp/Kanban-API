@@ -12,6 +12,7 @@
     "test:coverage": "npm test -- --coverage",
     "test:ci": "jest --coverage --runInBand --verbose --silent --noStackTrace",
     "lint": "eslint src/** --ext .ts --fix --no-error-on-unmatched-pattern",
+    "dev": "tsnd --respawn --transpile-only --cls --exit-child src/server.ts",
     "build": "tsc --build tsconfig.build.json",
     "start": "node ."
   },
