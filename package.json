@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/GabrielGaspar447/Mamboo-Kanban-API#readme",
   "devDependencies": {
+    "@shelf/jest-mongodb": "^2.2.1",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
@@ -53,6 +54,7 @@
     "express": "^4.17.3",
     "express-async-errors": "^3.1.1",
     "joi": "^17.6.0",
+    "mongodb": "^4.5.0",
     "mongoose": "^6.2.11"
   }
 }
