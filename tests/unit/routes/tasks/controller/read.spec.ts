@@ -34,8 +34,8 @@ describe("TasksController read method unit tests", () => {
     // mock the return value of the tasksService.read method
     mockTasksService.read = jest.fn().mockResolvedValue(fakeTaskResponse)
 
-    // Just like the real express json, here I'm mocking status method to return the
-    // response object so that the json method can be chained with it.
+    // Just like the real express response object, here I'm mocking status method
+    // to return theresponse object so that the json method can be chained with it.
     mockRes.status = jest.fn().mockReturnValue(mockRes)
     mockRes.json = jest.fn()
   })
