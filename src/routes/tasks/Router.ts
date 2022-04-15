@@ -30,5 +30,12 @@ export class TasksRouter {
     )
 
     this.router.get('/', this.controller.read)
+
+    this.router.patch(
+      '/:id',
+      this.middlewares.validatePathId,
+      this.middlewares.validateBody(this.validators.updateTaskValidator),
+      this.controller.update
+    )
   }
 }
