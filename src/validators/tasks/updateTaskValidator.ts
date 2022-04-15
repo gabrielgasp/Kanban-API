@@ -30,7 +30,8 @@ export const updateTaskSchema = Joi.object({ // This is exported for testing pur
     'string.base': '400|{#label} must be a string',
     'string.empty': '400|{#label} can not be an empty string'
   })
-}).messages({
+}).min(1).messages({
+  'object.min': '400|You must provide at least one field to update',
   'object.unknown': '400|Unknown property: {#label}'
 })
 
