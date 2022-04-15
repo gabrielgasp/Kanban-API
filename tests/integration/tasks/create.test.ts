@@ -147,5 +147,26 @@ describe('Tasks Create endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"members[0]" can not be an empty string')
     })
+
+    it('Should 400 with message when tags is not an array', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, tags: 'tag' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"tags" must be an array')
+    })
+
+    it('Should 400 with message when a tags item is not a string', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, tags: [1] } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"tags[0]" must be a string')
+    })
+
+    it('Should 400 with message when a tags item is an empty string', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, tags: [""] } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"tags[0]" can not be an empty string')
+    })
   })
 })
