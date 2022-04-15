@@ -29,6 +29,7 @@ export default {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "src/server.ts",
+    "src/database/connection.ts",
     "src/ts/interfaces",
     "src/ts/types",
   ],
