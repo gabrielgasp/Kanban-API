@@ -155,5 +155,26 @@ describe('Tasks Update endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"description" must be a string')
     })
+
+    it('Should 400 with message when members is not an array', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { members: 'member' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"members" must be an array')
+    })
+
+    it('Should 400 with message when a members item is not a string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { members: [1] } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"members[0]" must be a string')
+    })
+
+    it('Should 400 with message when a members item is an empty string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { members: [""] } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"members[0]" can not be an empty string')
+    })
   })
 })
