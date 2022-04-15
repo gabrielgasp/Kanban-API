@@ -2,12 +2,15 @@ import 'dotenv/config'
 import express, { Express } from 'express'
 import 'express-async-errors' // This is a lib that will automatically catch all async errors and send them to the error handler
 import { errorHandler } from './middlewares'
+import { routersFactory } from './Factory'
 
 const app: Express = express() // Initialize express app
 
 app.use(express.json()) // Parse all JSON in incoming requests so they can be used as JS objects
 
 app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // API Healthcheck endpoint
+
+app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
 app.use(errorHandler) // Receive errors when next(error) is called
 
