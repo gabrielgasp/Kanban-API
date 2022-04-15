@@ -120,5 +120,19 @@ describe('Tasks Update endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"boardId" can not be updated')
     })
+
+    it('Should 400 with message when status is not a string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { status: 1 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"status" must be a string')
+    })
+
+    it('Should 400 with message when status is an empty string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { status: "" } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"status" can not be an empty string')
+    })
   })
 })
