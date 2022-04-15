@@ -168,5 +168,12 @@ describe('Tasks Create endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"tags[0]" can not be an empty string')
     })
+
+    it('Should 400 with message when an unknown property is provided', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, unexpectedProperty: 'hello' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('Unknown property: "unexpectedProperty"')
+    })
   })
 })
