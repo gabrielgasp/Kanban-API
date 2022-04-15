@@ -29,8 +29,9 @@ describe('Tasks Create endpoint integration tests', () => {
   })
 
   describe('When operation is successful', () => {
-    let createdTaskId: string
-    it('Should 201 with created task data', async () => {
+    let createdTasksIds: string[] = []
+
+    it('Should 201 with created task data when creating a task with all fields', async () => {
       const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: newTask })
 
       expect(status).toBe(201)
@@ -39,13 +40,45 @@ describe('Tasks Create endpoint integration tests', () => {
       expect(body).toHaveProperty('createdAt')
       expect(body).toHaveProperty('updatedAt')
 
-      createdTaskId = body._id // We save the id of the created task so we can use it in the next test
+      createdTasksIds.push(body._id) // We save the id of the created task so we can use it in a later test
     })
 
-    it('Task should exist in the database', async () => {
-      const task = await taskModel.findById(createdTaskId)
+    it('Should 201 with created task data when creating a task without description', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: {...newTask, description: undefined } })
 
-      expect(task).toMatchObject(newTask)
+      expect(status).toBe(201)
+      expect(body.description).toBe('')
+      expect(body).toHaveProperty('_id')
+
+      createdTasksIds.push(body._id) // We save the id of the created task so we can use it in a later test
+    })
+
+    it('Should 201 with created task data when creating a task without members', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: {...newTask, members: undefined } })
+
+      expect(status).toBe(201)
+      expect(body.members).toEqual([])
+      expect(body).toHaveProperty('_id')
+
+      createdTasksIds.push(body._id) // We save the id of the created task so we can use it in a later test
+    })
+
+    it('Should 201 with created task data when creating a task without tags', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: {...newTask, tags: undefined } })
+
+      expect(status).toBe(201)
+      expect(body.tags).toEqual([])
+      expect(body).toHaveProperty('_id')
+
+      createdTasksIds.push(body._id) // We save the id of the created task so we can use it in a later test
+    })
+
+    it('All tasks should exist in the database', async () => {
+      const tasks = await taskModel.find()
+
+      tasks.forEach(({_id}) => {
+        expect(createdTasksIds).toContain(_id.toString())
+      })
     })
   })
 
