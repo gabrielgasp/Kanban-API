@@ -14,6 +14,8 @@ let task = {
   tags: ['test']
 }
 
+const fakeId = '5e9f8f9b8f9b8f9b8f9b8f9b'
+
 describe('Tasks Update endpoint integration tests', () => {
   let mongod: MongoMemoryServer;
 
@@ -110,6 +112,13 @@ describe('Tasks Update endpoint integration tests', () => {
 
       expect(status).toBe(400)
       expect(body.message).toBe('ID must be a valid ObjectId' )
+    })
+
+    it('Should 400 with message when trying to update boardId', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { boardId: 2 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"boardId" can not be updated')
     })
   })
 })
