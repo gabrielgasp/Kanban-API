@@ -14,12 +14,12 @@ export const newTaskSchema = Joi.object({ // This is exported for testing purpos
   }),
   status: Joi.string().trim().required().messages({ // This would probably be replaced by a column_id; ex: "BACKLOG" | "IN_PROGRESS" | "DONE", etc.
     'string.base': '400|{#label} must be a string',
-    'string.empty': '400|{#label} can not be empty string',
+    'string.empty': '400|{#label} can not be an empty string',
     'any.required': '400|{#label} is required'
   }),
   title: Joi.string().trim().required().messages({
     'string.base': '400|{#label} must be a string',
-    'string.empty': '400|{#label} can not be empty string',
+    'string.empty': '400|{#label} can not be an empty string',
     'any.required': '400|{#label} is required'
   }),
   description: Joi.string().empty('').trim().default('').messages({

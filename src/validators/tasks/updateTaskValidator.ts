@@ -11,11 +11,11 @@ export const updateTaskSchema = Joi.object({ // This is exported for testing pur
   }),
   status: Joi.string().trim().messages({ // This would probably be replaced by a column_id; ex: "BACKLOG" | "IN_PROGRESS" | "DONE", etc.
     'string.base': '400|{#label} must be a string',
-    'string.empty': '400|{#label} can not be empty string'
+    'string.empty': '400|{#label} can not be an empty string'
   }),
   title: Joi.string().trim().messages({
     'string.base': '400|{#label} must be a string',
-    'string.empty': '400|{#label} can not be empty string'
+    'string.empty': '400|{#label} can not be an empty string'
   }),
   description: Joi.string().allow('').trim().messages({
     'string.base': '400|{#label} must be a string'
