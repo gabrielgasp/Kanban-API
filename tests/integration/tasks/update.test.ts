@@ -148,5 +148,12 @@ describe('Tasks Update endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"title" can not be an empty string')
     })
+
+    it('Should 400 with message when description is not a string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { description: 1 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"description" must be a string')
+    })
   })
 })
