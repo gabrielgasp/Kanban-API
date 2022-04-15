@@ -197,5 +197,12 @@ describe('Tasks Update endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"tags[0]" can not be an empty string')
     })
+
+    it('Should 400 with message when no fields are provided (empty body)', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch' })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('You must provide at least one field to update')
+    })
   })
 })
