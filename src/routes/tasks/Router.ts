@@ -37,5 +37,11 @@ export class TasksRouter {
       this.middlewares.validateBody(this.validators.updateTaskValidator),
       this.controller.update
     )
+
+    this.router.delete(
+      '/:id',
+      this.middlewares.validatePathId,
+      this.controller.delete
+    )
   }
 }
