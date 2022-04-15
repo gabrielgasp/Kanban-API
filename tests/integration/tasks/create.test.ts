@@ -48,4 +48,33 @@ describe('Tasks Create endpoint integration tests', () => {
       expect(task).toMatchObject(newTask)
     })
   })
+  describe('When operation fails', () => {
+    it('Should 400 with message when boardId is not provided', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, boardId: undefined } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"boardId" is required')
+    })
+
+    it('Should 400 with message when boardId is not a number', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, boardId: 'test' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"boardId" must be a positive integer')
+    })
+
+    it('Should 400 with message when boardId is not an integer', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, boardId: 1.5 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"boardId" must be a positive integer')
+    })
+
+    it('Should 400 with message when boardId is negative', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, boardId: -1 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"boardId" must be a positive integer')
+    })
+  })
 })
