@@ -30,6 +30,7 @@ export default {
     "/node_modules/",
     "src/server.ts",
     "src/ts/interfaces",
+    "src/ts/types",
   ],
 
   // Indicates which provider should be used to instrument code for coverage
