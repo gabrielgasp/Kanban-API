@@ -5,7 +5,7 @@ import { IService, IRepository } from '../interfaces'
 // how we read/write things to the database or how we receive/respond http requests.
 export abstract class AbstractService<T> implements IService<T> {
   constructor (
-    protected readonly repository: IRepository<T>
+    protected readonly repository: IRepository<T> // Here we expect a repository that follows the generic T interface to be injected.
   ) {}
 
   public async create (data: T): Promise<T> {

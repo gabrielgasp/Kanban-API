@@ -7,7 +7,7 @@ import { IController, IService } from '../interfaces'
 // The controller has no knowledge of the database or business logic behind your application.
 export abstract class Controller<T> implements IController {
   constructor (
-    protected service: IService<T>
+    protected service: IService<T> // Here we expect a service that follows the generic T interface to be injected.
   ) {
     this.create = this.create.bind(this) // These bindings are necessary to make sure that the "this" keyword is properly
     this.read = this.read.bind(this) //     bound to the controller. Without these bindings, the "this" keyword would be bound

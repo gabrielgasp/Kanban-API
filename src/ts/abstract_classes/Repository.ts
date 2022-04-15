@@ -7,7 +7,7 @@ import { IRepository } from '../interfaces'
 // the database (or ORM/ODM) we use.
 export abstract class AbstractRepository<T> implements IRepository<T> {
   constructor (
-    protected readonly model: Model<T & Document>
+    protected readonly model: Model<T & Document> // Here we expect a mongoose model that follows the generic T interface to be injected.
   ) {}
 
   public async create (data: T): Promise<T> {
