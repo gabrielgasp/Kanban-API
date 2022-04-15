@@ -28,5 +28,7 @@ export class TasksRouter {
       this.middlewares.validateBody(this.validators.newTaskValidator),
       this.controller.create
     )
+
+    this.router.get('/', this.controller.read)
   }
 }
