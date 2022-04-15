@@ -8,7 +8,12 @@ import { IController, IService } from '../interfaces'
 export abstract class Controller<T> implements IController {
   constructor (
     protected service: IService<T>
-  ) {}
+  ) {
+    this.create = this.create.bind(this) // These bindings are necessary to make sure that the "this" keyword is properly
+    this.read = this.read.bind(this) //     bound to the controller. Without these bindings, the "this" keyword would be bound
+    this.update = this.update.bind(this) // to the express request and we would get an error when trying to call the service,
+    this.delete = this.delete.bind(this) // which is not what we want.
+  }
 
   public async create (req: Request, res: Response): Promise<Response> {
     const result = await this.service.create(req.body)
