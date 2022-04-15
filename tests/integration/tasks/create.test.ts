@@ -48,6 +48,7 @@ describe('Tasks Create endpoint integration tests', () => {
       expect(task).toMatchObject(newTask)
     })
   })
+
   describe('When operation fails', () => {
     it('Should 400 with message when boardId is not provided', async () => {
       const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, boardId: undefined } })
@@ -75,6 +76,27 @@ describe('Tasks Create endpoint integration tests', () => {
 
       expect(status).toBe(400)
       expect(body.message).toBe('"boardId" must be a positive integer')
+    })
+
+    it('Should 400 with message when status is not provided', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, status: undefined } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"status" is required')
+    })
+
+    it('Should 400 with message when status is not a string', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, status: 1 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"status" must be a string')
+    })
+
+    it('Should 400 with message when status is an empty string', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, status: "" } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"status" can not be an empty string')
     })
   })
 })
