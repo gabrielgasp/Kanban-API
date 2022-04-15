@@ -33,7 +33,7 @@ export const newTaskSchema = Joi.object({ // This is exported for testing purpos
   tags: Joi.array().items(Joi.string().trim()).default([]).messages({ // This type would probably be an array of ObjectIds if we have a "tags" collection
     'array.base': '400|{#label} must be an array',
     'string.base': '400|{#label} must be a string',
-    'string.empty': '400|Empty strings are not allowed in {#label}'
+    'string.empty': '400|{#label} can not be an empty string'
   })
 }).messages({
   'object.unknown': '400|Unknown property: {#label}'
