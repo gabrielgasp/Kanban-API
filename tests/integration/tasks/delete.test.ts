@@ -53,4 +53,12 @@ describe('Tasks Delete endpoint integration tests', () => {
     })
   })
 
+  describe('When operation fails', () => {
+    it('Should 404 when trying to delete a task that does not exist', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/000000000000000000000000`, { method: 'delete' })
+
+      expect(status).toBe(404)
+      expect(body.message).toBe('Task not found')
+    })
+  })
 })
