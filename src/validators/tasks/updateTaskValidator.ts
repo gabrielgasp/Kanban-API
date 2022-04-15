@@ -34,6 +34,9 @@ export const updateTaskSchema = Joi.object({ // This is exported for testing pur
   'object.unknown': '400|Unknown property: {#label}'
 })
 
+// Ps: Curious about the weird messages with "code|message" format? Read the explanation in middlewares/validateBody.ts
+// Ps2: {#label} is a placeholder for the property name that failed validation.
+
 // This function acts as an adapter between the Joi validation library and the
 // application, making it easy to change the validation library later if needed.
 export const updateTaskValidator: TBodyValidator = (body) => {
