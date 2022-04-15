@@ -204,5 +204,12 @@ describe('Tasks Update endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('You must provide at least one field to update')
     })
+
+    it('Should 400 with message when an unknown property is provided', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}`, { method: 'patch', body: { unexpectedProperty: 'hello' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('Unknown property: "unexpectedProperty"')
+    })
   })
 })
