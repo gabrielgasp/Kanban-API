@@ -20,7 +20,7 @@ export class TasksController extends Controller<ITask> implements ITasksControll
 
   // Here we create a new method exclusive to the TasksController class that will be used to read tasks from a specific board.
   public async readFromBoard (req: Request, res: Response): Promise<Response> {
-    const result = await this.service.readFromBoard(Number(req.params.boardId))
+    const result = await this.service.readFromBoard(req.params.boardId)
     if (!result.length) {
       return res.status(404)
         .json({ message: 'No tasks were found for the boardId provided, please make sure that the board exist and have tasks' })

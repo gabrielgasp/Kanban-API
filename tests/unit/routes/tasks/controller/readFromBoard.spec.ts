@@ -51,7 +51,7 @@ describe("TasksController readFromBoard method unit tests", () => {
   it("should call the readFromBoard method of the service with boardId as a number", async () => {
     await tasksController.readFromBoard(mockReq, mockRes)
 
-    expect(mockTasksService.readFromBoard).toHaveBeenCalledWith(Number(mockReq.params.boardId))
+    expect(mockTasksService.readFromBoard).toHaveBeenCalledWith(mockReq.params.boardId)
   })
 
   describe('When board exist and there are tasks in it', () => {

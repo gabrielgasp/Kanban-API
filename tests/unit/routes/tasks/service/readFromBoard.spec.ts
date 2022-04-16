@@ -33,13 +33,13 @@ describe("TasksService readFromBoard method unit tests", () => {
   })
 
   it("should call the readFromBoard method of the repository with boardId", async () => {
-    await tasksService.readFromBoard(1)
+    await tasksService.readFromBoard('1')
 
-    expect(mockTasksRepository.readFromBoard).toHaveBeenCalledWith(1)
+    expect(mockTasksRepository.readFromBoard).toHaveBeenCalledWith('1')
   })
 
   it("should return the result of the repository's readFromBoard method", async () => {
-    const result = await tasksService.readFromBoard(1)
+    const result = await tasksService.readFromBoard('1')
 
     expect(result).toEqual(fakeTaskResponse)
   })

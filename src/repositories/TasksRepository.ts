@@ -10,7 +10,7 @@ export class TasksRepository extends AbstractRepository<ITask> implements ITasks
   }
 
   // Here we create a new method exclusive to the TasksRepository class that will be used to read tasks from a specific board.
-  public async readFromBoard (boardId: number): Promise<ITask[]> {
+  public async readFromBoard (boardId: string): Promise<ITask[]> {
     return await this.model.find({ boardId }).sort({ status: 1, priority: -1 })
   }
 

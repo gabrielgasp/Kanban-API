@@ -35,14 +35,14 @@ describe("TasksRepository readFromBoard method unit tests", () => {
   })
 
   it("should call the find method of the model with boardId and sort method with sorting arguments", async () => {
-    await tasksRepository.readFromBoard(1)
+    await tasksRepository.readFromBoard('1')
 
-    expect(mockTasksModel.find).toHaveBeenCalledWith({ boardId: 1 })
+    expect(mockTasksModel.find).toHaveBeenCalledWith({ boardId: '1' })
     expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ status: 1, priority: -1 })
   })
 
   it("should return the result of the model's sort method", async () => {
-    const result = await tasksRepository.readFromBoard(1)
+    const result = await tasksRepository.readFromBoard('1')
 
     expect(result).toEqual(fakeTaskResponse)
   })
