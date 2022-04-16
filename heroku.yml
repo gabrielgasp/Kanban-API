@@ -1,0 +1,6 @@
+build:
+  docker:
+    web: Dockerfile.prod
+
+run:
+  web: node build/server.js

@@ -1,0 +1,16 @@
+# BUILD STAGE
+FROM node:16-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --silent
+COPY . .
+RUN npm run build
+RUN npm prune --production
+
+# PRODUCTION STAGE
+FROM node:16-alpine AS prod
+WORKDIR /app
+COPY --from=build /app/build ./build/
+COPY --from=build /app/package.json ./
+COPY --from=build /app/node_modules ./node_modules/
+ENTRYPOINT ["npm", "start"]
