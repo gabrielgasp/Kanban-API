@@ -60,7 +60,7 @@ describe('Tasks Read endpoint integration tests', () => {
       await taskModel.insertMany(newTasks)
     })
 
-    it('Should 200 with all tasks ordered by boardId and status', async () => {
+    it('Should 200 with all tasks ordered by boardId, status and priority', async () => {
       const { status, body } = await fetchEndpoint(endpoint)
 
       expect(status).toBe(200)
