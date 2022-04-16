@@ -15,4 +15,5 @@ export class MockTasksService extends TasksService {
   public read = jest.fn()
   public update = jest.fn()
   public delete = jest.fn()
+  public updateMembers = jest.fn()
 }
