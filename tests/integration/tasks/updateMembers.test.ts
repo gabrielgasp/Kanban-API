@@ -51,6 +51,23 @@ describe('Tasks updateMembers endpoint integration tests', () => {
       expect(taskInDatabase!.members).toEqual(['teste'])
     })
   })
+  describe('When operation successfully removes a member', () => {
+    it('Should 200 with updated task data', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/members`, { method: 'patch', body: { operation: -1, value: 'teste' } })
+      
+      expect(status).toBe(200)
+      expect(body).toMatchObject({ ...task, members: [] })
+      expect(body).toHaveProperty('_id')
+      expect(body).toHaveProperty('createdAt')
+      expect(body).toHaveProperty('updatedAt')
+    })
+
+    it('Should have updated members in the database collection', async () => {
+      const taskInDatabase = await taskModel.findById(taskId)
+
+      expect(taskInDatabase!.members).toEqual([])
+    })
+  })
 
 
 })
