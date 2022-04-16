@@ -7,7 +7,7 @@ const endpoint = '/tasks'
 
 const newTasks = [
   {
-    boardId: 1,
+    boardId: 2,
     status: 'todo',
     title: 'task that I need to do',
   },
@@ -51,14 +51,16 @@ describe('Tasks Read endpoint integration tests', () => {
       await taskModel.insertMany(newTasks)
     })
 
-    it('Should 200 with all tasks', async () => {
+    it('Should 200 with all tasks ordered by boardId and status', async () => {
       const { status, body } = await fetchEndpoint(endpoint)
 
       expect(status).toBe(200)
-      expect(body).toMatchObject(newTasks)
       expect(body[0]).toHaveProperty('_id')
+      expect(body[0]).toMatchObject(newTasks[2])
       expect(body[1]).toHaveProperty('_id')
+      expect(body[1]).toMatchObject(newTasks[1])
       expect(body[2]).toHaveProperty('_id')
+      expect(body[2]).toMatchObject(newTasks[0])
     })
   })
 })
