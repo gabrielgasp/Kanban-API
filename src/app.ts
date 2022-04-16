@@ -12,6 +12,8 @@ app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // A
 
 app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
+app.get('/', (_req, res) => res.redirect('/tasks')) // Redirect from "/" to "/tasks"
+
 app.use(errorHandler) // Receive errors when next(error) is called
 
 export { app } // Export the app so it can be used in tests and the in the server.ts file
