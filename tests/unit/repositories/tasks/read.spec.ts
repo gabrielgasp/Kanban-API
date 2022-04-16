@@ -16,7 +16,7 @@ const fakeTaskResponse = [
   },
   {
     _id: '2',
-    boardId: 1,
+    boardId: 2,
     status: 'in_progress',
     title: 'some task in progress',
     description: 'task in progress description',
@@ -27,13 +27,16 @@ const fakeTaskResponse = [
 
 describe("TasksRepository read method unit tests", () => {
   beforeAll(() => { // mock the return value of the taskModel.find method
-    mockTasksModel.find = jest.fn().mockResolvedValue(fakeTaskResponse)
+    mockTasksModel.find = jest.fn().mockReturnValue({
+      sort: jest.fn().mockResolvedValue(fakeTaskResponse)
+    })
   })
 
   it("should call the find method of the model with no arguments", async () => {
     await tasksRepository.read()
 
     expect(mockTasksModel.find).toHaveBeenCalledWith()
+    expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ boardId: 1, status: 1 })
   })
 
   it("should return the result of the model's find method", async () => {
