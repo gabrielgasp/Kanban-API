@@ -69,4 +69,13 @@ describe('Tasks updateTags endpoint integration tests', () => {
       expect(taskInDatabase!.tags).toEqual([])
     })
   })
+
+  describe('When operation fails', () => {
+    it('Should 404 when trying to update a task that does not exist', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/000000000000000000000000/tags`, { method: 'patch', body: { operation: 1, value: 'value' } })
+
+      expect(status).toBe(404)
+      expect(body.message).toBe('Task not found')
+    })
+  })
 })
