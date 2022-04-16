@@ -84,5 +84,19 @@ describe('Tasks updateTags endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('ID must be a valid ObjectId' )
     })
+
+    it('Should 400 with message when trying to update without an operation', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: undefined, value: 'value' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"operation" is required')
+    })
+
+    it('Should 400 with message when trying to update with invalid operation', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: 'invalid', value: 'value' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"operation" must be 1 (add) or -1 (remove)')
+    })
   })
 })
