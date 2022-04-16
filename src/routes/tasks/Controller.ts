@@ -13,7 +13,8 @@ export class TasksController extends Controller<ITask> implements ITasksControll
   // If we don't specify a constructor, the "updateMembers" method will be undefined.
   constructor (protected readonly service: ITasksService) {
     super(service)
-    this.updateMembers = this.updateMembers.bind(this) // We also need to bind the method here so that we dont lose the context of the "this" keyword.
+    this.readFromBoard = this.readFromBoard.bind(this) // We also need to bind the method here so that we dont lose the context of the "this" keyword.
+    this.updateMembers = this.updateMembers.bind(this)
     this.updateTags = this.updateTags.bind(this)
   }
 
