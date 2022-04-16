@@ -18,8 +18,8 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
     return await this.model.create(data)
   }
 
-  public async read (): Promise<T[]> {
-    return await this.model.find()
+  public async read (skip: number, limit: number): Promise<T[]> {
+    return await this.model.find().skip(skip).limit(limit) // Here we are doing pagination based on parameters received.
   }
 
   public async update (id: string, data: Partial<T>): Promise<T | null> {

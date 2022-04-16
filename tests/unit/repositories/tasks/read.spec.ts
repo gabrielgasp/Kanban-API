@@ -28,21 +28,26 @@ const fakeTaskResponse = [
 ]
 
 describe("TasksRepository read method unit tests", () => {
-  beforeAll(() => { // mock the return value of the taskModel.find method
-    mockTasksModel.find = jest.fn().mockReturnValue({
-      sort: jest.fn().mockResolvedValue(fakeTaskResponse)
-    })
+  const findChainableMethods = {
+    sort: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockResolvedValue(fakeTaskResponse),
+  }
+  beforeAll(() => { // Here I'm mocking all external methods used in the TasksRepository read method
+    mockTasksModel.find = jest.fn().mockReturnValue(findChainableMethods)
   })
 
-  it("should call the find method of the model with boardId and sort method with sorting arguments", async () => {
-    await tasksRepository.read()
+  it("should call the model methods with the expected arguments", async () => {
+    await tasksRepository.read(0, 5)
 
     expect(mockTasksModel.find).toHaveBeenCalledWith()
     expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ boardId: 1, status: 1, priority: -1 })
+    expect(mockTasksModel.find().sort({}).skip).toHaveBeenCalledWith(0)
+    expect(mockTasksModel.find().sort({}).skip(0).limit).toHaveBeenCalledWith(5)
   })
 
   it("should return the result of the model's sort method", async () => {
-    const result = await tasksRepository.read()
+    const result = await tasksRepository.read(0, 5)
 
     expect(result).toEqual(fakeTaskResponse)
   })
