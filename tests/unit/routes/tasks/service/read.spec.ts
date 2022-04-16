@@ -28,19 +28,51 @@ const fakeTaskResponse = [
 ]
 
 describe("TasksService read method unit tests", () => {
-  beforeAll(() => { // mock the return value of the tasksRepository.read method
-    mockTasksRepository.read = jest.fn().mockResolvedValue(fakeTaskResponse)
+  beforeAll(() => {
+    mockTasksRepository.read = jest.fn().mockResolvedValue(fakeTaskResponse) // mock the return value of the tasksRepository.read method
+    mockTasksRepository.countDocuments = jest.fn() // Here we are mocking the return on countDocuments method according to what the test needs.
+    .mockResolvedValueOnce(20) // First call
+    .mockResolvedValueOnce(20) // Second call
+    .mockResolvedValueOnce(20) // Third call
+    .mockResolvedValueOnce(20) // Fourth call
+    .mockResolvedValueOnce(9) // Fifth call
   })
 
-  it("should call the read method of the repository with no arguments", async () => {
-    await tasksService.read()
+  it("should call the read method of the repository with skip and limit arguments", async () => {
+    await tasksService.read('1', '5')
 
-    expect(mockTasksRepository.read).toHaveBeenCalledWith()
+    expect(mockTasksRepository.read).toHaveBeenCalledWith(0, 5)
   })
 
-  it("should return the result of the repository's read method", async () => {
-    const result = await tasksService.read()
+  describe('When there is a previous page', () => {
+    it('should return an object with property data and property previousPage', async () => {
+      const result = await tasksService.read('2', '5')
 
-    expect(result).toEqual(fakeTaskResponse)
+      expect(result).toMatchObject({ data: fakeTaskResponse, previousPage: 1 })
+    })
+  })
+
+  describe('When there is no previousPage', () => {
+    it('should return an object with property data and no property previousPage', async () => {
+      const result = await tasksService.read('1', '5')
+
+      expect(result).toMatchObject({ data: fakeTaskResponse, previousPage: undefined })
+    })
+  })
+
+  describe('When there is a next page', () => {
+    it('should return an object with property data and property nextPage', async () => {
+      const result = await tasksService.read('1', '5')
+
+      expect(result).toMatchObject({ data: fakeTaskResponse, nextPage: 2 })
+    })
+  })
+
+  describe('When there is no nextPage', () => {
+    it('should return an object with property data and no property nextPage', async () => {
+      const result = await tasksService.read('2', '5')
+
+      expect(result).toMatchObject({ data: fakeTaskResponse, nextPage: undefined })
+    })
   })
 })
