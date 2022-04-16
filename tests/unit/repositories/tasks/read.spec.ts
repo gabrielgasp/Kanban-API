@@ -34,14 +34,14 @@ describe("TasksRepository read method unit tests", () => {
     })
   })
 
-  it("should call the find method of the model with no arguments", async () => {
+  it("should call the find method of the model with boardId and sort method with sorting arguments", async () => {
     await tasksRepository.read()
 
     expect(mockTasksModel.find).toHaveBeenCalledWith()
     expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ boardId: 1, status: 1, priority: -1 })
   })
 
-  it("should return the result of the model's find method", async () => {
+  it("should return the result of the model's sort method", async () => {
     const result = await tasksRepository.read()
 
     expect(result).toEqual(fakeTaskResponse)
