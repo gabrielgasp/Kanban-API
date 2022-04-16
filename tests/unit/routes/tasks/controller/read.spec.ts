@@ -42,12 +42,12 @@ describe("TasksController read method unit tests", () => {
     mockRes.json = jest.fn()
   })
 
-  mockReq.body = fakeTaskResponse
+  mockReq.query = { page: '1' }
 
-  it("should call the read method of the service with no arguments", async () => {
+  it("should call the read method of the service with query.page", async () => {
     await tasksController.read(mockReq, mockRes)
 
-    expect(mockTasksService.read).toHaveBeenCalledWith()
+    expect(mockTasksService.read).toHaveBeenCalledWith(mockReq.query.page)
   })
 
   it("should call res.status with 200 and res.json with the result of service's read method", async () => {
