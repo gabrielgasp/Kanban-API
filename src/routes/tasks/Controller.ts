@@ -17,6 +17,16 @@ export class TasksController extends Controller<ITask> implements ITasksControll
     this.updateTags = this.updateTags.bind(this)
   }
 
+  // Here we create a new method exclusive to the TasksController class that will be used to read tasks from a specific board.
+  public async readFromBoard (req: Request, res: Response): Promise<Response> {
+    const result = await this.service.readFromBoard(Number(req.params.boardId))
+    if (!result.length) {
+      return res.status(404)
+        .json({ message: 'No tasks were found for the boardId provided, please make sure that the board exist there are tasks in it' })
+    }
+    return res.status(200).json(result)
+  }
+
   // Here we create a new method exclusive to the TasksController class that will be used to update the members array.
   public async updateMembers (req: Request, res: Response): Promise<Response> {
     const { operation, value } = req.body
