@@ -16,4 +16,5 @@ export class MockTasksService extends TasksService {
   public update = jest.fn()
   public delete = jest.fn()
   public updateMembers = jest.fn()
+  public updateTags = jest.fn()
 }
