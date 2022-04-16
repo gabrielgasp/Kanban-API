@@ -20,6 +20,12 @@ const newTasks = [
   },
   {
     boardId: 1,
+    status: 'in_progress',
+    title: 'task that I am also doing but is more important',
+    priority: 5,
+  },
+  {
+    boardId: 1,
     status: 'done',
     title: 'task that I have done',
     priority: 3,
@@ -59,11 +65,13 @@ describe('Tasks Read endpoint integration tests', () => {
 
       expect(status).toBe(200)
       expect(body[0]).toHaveProperty('_id')
-      expect(body[0]).toMatchObject(newTasks[2])
+      expect(body[0]).toMatchObject(newTasks[3])
       expect(body[1]).toHaveProperty('_id')
-      expect(body[1]).toMatchObject(newTasks[1])
+      expect(body[1]).toMatchObject(newTasks[2])
       expect(body[2]).toHaveProperty('_id')
-      expect(body[2]).toMatchObject(newTasks[0])
+      expect(body[2]).toMatchObject(newTasks[1])
+      expect(body[3]).toHaveProperty('_id')
+      expect(body[3]).toMatchObject(newTasks[0])
     })
   })
 })

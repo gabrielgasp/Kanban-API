@@ -38,7 +38,7 @@ describe("TasksRepository read method unit tests", () => {
     await tasksRepository.read()
 
     expect(mockTasksModel.find).toHaveBeenCalledWith()
-    expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ boardId: 1, status: 1 })
+    expect(mockTasksModel.find().sort).toHaveBeenCalledWith({ boardId: 1, status: 1, priority: -1 })
   })
 
   it("should return the result of the model's find method", async () => {
