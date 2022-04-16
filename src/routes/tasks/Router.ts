@@ -1,12 +1,11 @@
 import { Router } from 'express'
-import { Controller } from '../../ts/abstract_classes'
-import { ITask, IMiddlewares, IValidators } from '../../ts/interfaces'
+import { IMiddlewares, IValidators, ITasksController } from '../../ts/interfaces'
 
 export class TasksRouter {
   public router = Router()
 
   constructor (
-    private readonly controller: Controller<ITask>,
+    private readonly controller: ITasksController,
     private readonly middlewares: IMiddlewares,
     private readonly validators: IValidators
   ) {
@@ -36,6 +35,13 @@ export class TasksRouter {
       this.middlewares.validatePathId,
       this.middlewares.validateBody(this.validators.updateTaskValidator),
       this.controller.update
+    )
+
+    this.router.patch(
+      '/:id/members',
+      this.middlewares.validatePathId,
+      this.middlewares.validateBody(this.validators.updateTaskMembersOrTagsValidator),
+      this.controller.updateMembers
     )
 
     this.router.delete(
