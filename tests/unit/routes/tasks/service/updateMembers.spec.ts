@@ -4,8 +4,6 @@ import { MockTasksRepository } from "../../../../__mocks__"
 const mockTasksRepository = new MockTasksRepository()
 const taskService = new TasksService(mockTasksRepository)
 
-const updateData = { status: 'in_progress' }
-
 const fakeUpdatedTask = {
   _id: '1',
   boardId: 1,
@@ -18,7 +16,7 @@ const fakeUpdatedTask = {
 }
 
 describe("TasksService updateMembers method unit tests", () => {
-  beforeAll(() => { // mock the return value of the tasksRepository.update method
+  beforeAll(() => { // mock the return value of the tasksRepository.updateMembers method
     mockTasksRepository.updateMembers = jest.fn().mockResolvedValue(fakeUpdatedTask)
   })
 
