@@ -52,4 +52,21 @@ describe('Tasks updateTags endpoint integration tests', () => {
     })
   })
 
+  describe('When operation successfully removes a tag', () => {
+    it('Should 200 with updated task data', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: -1, value: 'teste' } })
+      
+      expect(status).toBe(200)
+      expect(body).toMatchObject({ ...task, tags: [] })
+      expect(body).toHaveProperty('_id')
+      expect(body).toHaveProperty('createdAt')
+      expect(body).toHaveProperty('updatedAt')
+    })
+
+    it('Should have updated tags in the database collection', async () => {
+      const taskInDatabase = await taskModel.findById(taskId)
+
+      expect(taskInDatabase!.tags).toEqual([])
+    })
+  })
 })
