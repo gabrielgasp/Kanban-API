@@ -30,6 +30,8 @@ export class TasksRouter {
 
     this.router.get('/', this.controller.read)
 
+    this.router.get('/board/:boardId', this.controller.readFromBoard)
+
     this.router.patch(
       '/:id',
       this.middlewares.validatePathId,
