@@ -23,7 +23,7 @@ export class TasksController extends Controller<ITask> implements ITasksControll
     const result = await this.service.readFromBoard(Number(req.params.boardId))
     if (!result.length) {
       return res.status(404)
-        .json({ message: 'No tasks were found for the boardId provided, please make sure that the board exist there are tasks in it' })
+        .json({ message: 'No tasks were found for the boardId provided, please make sure that the board exist and have tasks' })
     }
     return res.status(200).json(result)
   }

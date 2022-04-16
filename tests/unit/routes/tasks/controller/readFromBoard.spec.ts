@@ -69,7 +69,7 @@ describe("TasksController readFromBoard method unit tests", () => {
 
       expect(mockRes.status).toHaveBeenCalledWith(404)
       expect(mockRes.json).toHaveBeenCalledWith({
-        message: 'No tasks were found for the boardId provided, please make sure that the board exist there are tasks in it'
+        message: 'No tasks were found for the boardId provided, please make sure that the board exist and have tasks'
       })
     })
   })
