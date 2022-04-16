@@ -44,6 +44,13 @@ export class TasksRouter {
       this.controller.updateMembers
     )
 
+    this.router.patch(
+      '/:id/tags',
+      this.middlewares.validatePathId,
+      this.middlewares.validateBody(this.validators.updateTaskMembersOrTagsValidator),
+      this.controller.updateTags
+    )
+
     this.router.delete(
       '/:id',
       this.middlewares.validatePathId,
