@@ -98,5 +98,26 @@ describe('Tasks updateTags endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"operation" must be 1 (add) or -1 (remove)')
     })
+
+    it('Should 400 with message when trying to update without a value', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: 1, value: undefined } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"value" is required')
+    })
+
+    it('Should 400 with message when trying to update with value that is not a string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: 1, value: 123 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"value" must be a string')
+    })
+
+    it('Should 400 with message when trying to update with value that is an empty string', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: 1, value: '' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"value" can not be an empty string')
+    })
   })
 })
