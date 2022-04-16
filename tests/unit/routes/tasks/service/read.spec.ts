@@ -11,6 +11,7 @@ const fakeTaskResponse = [
     status: 'todo',
     title: 'some todo task',
     description: 'todo description',
+    priority: 1,
     members: ['John', 'Jane'],
     tags: ['not so important']
   },
@@ -20,6 +21,7 @@ const fakeTaskResponse = [
     status: 'in_progress',
     title: 'some task in progress',
     description: 'task in progress description',
+    priority: 1,
     members: ['John', 'Jane'],
     tags: ['important']
   }

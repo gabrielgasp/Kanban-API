@@ -11,6 +11,7 @@ const fakeDeletedTask = {
   status: 'todo',
   title: 'some todo task',
   description: 'todo description',
+  priority: 1,
   members: ['John', 'Jane'],
   tags: ['not so important']
 }

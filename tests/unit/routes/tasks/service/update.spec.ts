@@ -12,6 +12,7 @@ const fakeUpdatedTask = {
   status: 'in_progress',
   title: 'test',
   description: 'test',
+  priority: 1,
   members: ['test'],
   tags: ['test']
 }

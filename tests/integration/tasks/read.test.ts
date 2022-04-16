@@ -10,16 +10,19 @@ const newTasks = [
     boardId: 2,
     status: 'todo',
     title: 'task that I need to do',
+    priority: 1,
   },
   {
     boardId: 1,
     status: 'in_progress',
     title: 'task that I am doing',
+    priority: 2,
   },
   {
     boardId: 1,
     status: 'done',
     title: 'task that I have done',
+    priority: 3,
   },
 ]
 

@@ -10,6 +10,7 @@ let task = {
   status: 'todo',
   title: 'test',
   description: 'test',
+  priority: 1,
   members: ['test'],
   tags: ['test']
 }
@@ -161,6 +162,34 @@ describe('Tasks Update endpoint integration tests', () => {
 
       expect(status).toBe(400)
       expect(body.message).toBe('"description" must be a string')
+    })
+
+    it('Should 400 with message when priority is not a number', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...task, priority: 'test' } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"priority" must be an integer')
+    })
+
+    it('Should 400 with message when priority is not an integer', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...task, priority: 1.5 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"priority" must be an integer')
+    })
+
+    it('Should 400 with message when priority is less than 1', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...task, priority: 0 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"priority" must be an integer between 1 and 5')
+    })
+
+    it('Should 400 with message when priority is greater than 5', async () => {
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...task, priority: 6 } })
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('"priority" must be an integer between 1 and 5')
     })
 
     it('Should 400 with message when members is not an array', async () => {

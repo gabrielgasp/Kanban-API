@@ -10,6 +10,7 @@ const task = {
   status: 'todo',
   title: 'test',
   description: 'test',
+  priority: 1,
   members: ['test'],
   tags: ['test']
 }

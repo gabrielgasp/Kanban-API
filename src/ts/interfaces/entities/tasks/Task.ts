@@ -3,6 +3,7 @@ export interface ITask {
   status: string
   title: string
   description: string
+  priority: number
   members: string[]
   tags: string[]
 }

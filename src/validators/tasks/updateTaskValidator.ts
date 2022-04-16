@@ -20,6 +20,12 @@ export const updateTaskSchema = Joi.object({ // This is exported for testing pur
   description: Joi.string().allow('').trim().messages({
     'string.base': '400|{#label} must be a string'
   }),
+  priority: Joi.number().integer().min(1).max(5).messages({
+    'number.base': '400|{#label} must be an integer',
+    'number.integer': '400|{#label} must be an integer',
+    'number.min': '400|{#label} must be an integer between 1 and 5',
+    'number.max': '400|{#label} must be an integer between 1 and 5'
+  }),
   members: Joi.array().items(Joi.string().trim()).messages({ // This type would probably be an array of ObjectIds if we have a "users" collection
     'array.base': '400|{#label} must be an array',
     'string.base': '400|{#label} must be a string',
