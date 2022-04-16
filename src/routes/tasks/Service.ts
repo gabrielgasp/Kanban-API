@@ -13,6 +13,11 @@ export class TasksService extends AbstractService<ITask> implements ITasksServic
     super(repository)
   }
 
+  // Here we create a new method exclusive to the TasksService class that will be used to read tasks from a specific board.
+  public async readFromBoard (boardId: number): Promise<ITask[]> {
+    return await this.repository.readFromBoard(boardId)
+  }
+
   // Here we create a new method exclusive to the TasksService class that will be used to update the members array.
   public async updateMembers (id: string, operation: 1 | -1, value: string): Promise<ITask | null> {
     return await this.repository.updateMembers(id, operation, value)
