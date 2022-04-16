@@ -77,5 +77,11 @@ describe('Tasks updateMembers endpoint integration tests', () => {
       expect(body.message).toBe('Task not found')
     })
 
+    it('Should 400 with message and provided ID is not a valid ObjectId', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/123/members`, { method: 'patch' }) // path id validation happens before body, that's why I'm not passing any body
+
+      expect(status).toBe(400)
+      expect(body.message).toBe('ID must be a valid ObjectId' )
+    })
   })
 })
