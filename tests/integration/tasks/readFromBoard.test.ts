@@ -55,4 +55,12 @@ describe('Tasks readFromBoard endpoint integration tests', () => {
     })
   })
 
+  describe('When there are no tasks in the collection for the boardId provided', () => {
+    it('Should 404 with message', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/2`)
+
+      expect(status).toBe(404)
+      expect(body.message).toBe('No tasks were found for the boardId provided, please make sure that the board exist and have tasks')
+    })
+  })
 })
