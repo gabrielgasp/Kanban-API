@@ -14,11 +14,21 @@ export class TasksController extends Controller<ITask> implements ITasksControll
   constructor (protected readonly service: ITasksService) {
     super(service)
     this.updateMembers = this.updateMembers.bind(this) // We also need to bind the method here so that we dont lose the context of the "this" keyword.
+    this.updateTags = this.updateTags.bind(this)
   }
 
+  // Here we create a new method exclusive to the TasksController class that will be used to update the members array.
   public async updateMembers (req: Request, res: Response): Promise<Response> {
     const { operation, value } = req.body
     const result = await this.service.updateMembers(req.params.id, operation, value)
+    if (!result) return res.status(404).json({ message: 'Task not found' })
+    return res.status(200).json(result)
+  }
+
+  // This is basically a copy of the updateMembers implementation.
+  public async updateTags (req: Request, res: Response): Promise<Response> {
+    const { operation, value } = req.body
+    const result = await this.service.updateTags(req.params.id, operation, value)
     if (!result) return res.status(404).json({ message: 'Task not found' })
     return res.status(200).json(result)
   }
