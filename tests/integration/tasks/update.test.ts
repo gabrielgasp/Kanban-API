@@ -75,6 +75,18 @@ describe('Tasks Update endpoint integration tests', () => {
       task.description = 'new description'
     })
 
+    it('Should 200 with updated task data when updating priority', async () => {
+      const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}`, { method: 'patch', body: { priority: 2 } })
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject({ ...task, priority: 2 })
+      expect(body).toHaveProperty('_id')
+      expect(body).toHaveProperty('createdAt')
+      expect(body).toHaveProperty('updatedAt')
+
+      task.priority = 2
+    })
+
     it('Should 200 with updated task data when updating members', async () => {
       const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}`, { method: 'patch', body: { members: ['new members'] } })
 
