@@ -14,7 +14,8 @@ app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // A
 
 app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)) // Apply swagger to route /docs for interactive documentation.
+const swaggerUiOptions = { customSiteTitle: 'Mamboo Kanban API Documentation' }
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions)) // Apply swagger to route /docs for interactive documentation.
 
 app.get('/', (_req, res) => res.redirect('/docs')) // Redirect from "/" to "/tasks"
 
