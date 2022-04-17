@@ -114,7 +114,7 @@
           {
             "in": "query",
             "name": "page",
-            "description": "Define a pagina que será exibida. Caso não seja informado será exibido a primeira pagina.",
+            "description": "Define a pagina que será exibida. Caso não seja informado uma pagina, será exibida a primeira.",
             "schema": {
               "type": "integer",
               "example": 1
@@ -123,7 +123,7 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Define a quantidade de documentos por pagina. Caso não seja informado será usado o valor 10 como padrão.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
+            "description": "Define a quantidade de documentos por pagina. Caso não seja informado um valor, será usado o valor 10 como padrão.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
             "schema": {
               "type": "string",
               "example": 10
@@ -132,7 +132,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Objeto com informações da paginação e lista com todas as tarefas de forma ordenada por boardId, status e priority e paginada utilizando os parametros informados ou valores padrão na ausência destes.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
+            "description": "Objeto com informações da paginação e lista com todas as tarefas de forma ordenada por boardId, status e priority e paginada utilizando os parametros informados ou valores padrões.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
             "content": {
               "application/json": {
                 "schema": {
@@ -286,7 +286,7 @@
           {
             "in": "path",
             "name": "taskId",
-            "description": "ID da tarefa que gostaria de atualizar.",
+            "description": "ID da tarefa que gostaria de deletar.",
             "required": true,
             "schema": {
               "type": "string"
@@ -414,7 +414,7 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Adiciona ou remove um item da lista de membros de uma tarefa.",
+        "summary": "Adiciona ou remove um membro da lista de membros de uma tarefa.",
         "operationId": "update task members",
         "parameters": [
           {
@@ -429,7 +429,7 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar e -1 para remover) e o valor que gostaria de adicionar/remover da lista de membros.",
+          "description": "Informe o tipo de operação (1 para adicionar ou -1 para remover) e o membro que gostaria de adicionar/remover da lista de membros.",
           "content": {
             "application/json": {
               "schema": {
@@ -512,7 +512,7 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Adiciona ou remove um item da lista de tags de uma tarefa.",
+        "summary": "Adiciona ou remove uma tag da lista de tags de uma tarefa.",
         "operationId": "update task tags",
         "parameters": [
           {
@@ -527,7 +527,7 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar e -1 para remover) e o valor que gostaria de adicionar/remover da lista de tags.",
+          "description": "Informe o tipo de operação (1 para adicionar ou -1 para remover) e a tag que gostaria de adicionar/remover da lista de tags.",
           "content": {
             "application/json": {
               "schema": {
