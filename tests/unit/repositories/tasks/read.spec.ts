@@ -43,7 +43,7 @@ describe("TasksRepository read method unit tests", () => {
   it("should call the model paginate method with the expected arguments", async () => {
     await tasksRepository.read(1, 5)
 
-    expect(mockTasksModel.paginate).toHaveBeenCalledWith({}, { page: 1, limit: 5, sort: { status: 1, priority: -1 } })
+    expect(mockTasksModel.paginate).toHaveBeenCalledWith({}, { page: 1, limit: 5, sort: { boardId: 1, status: 1, priority: -1 } })
   })
 
   it("should return the result of the model's paginate method", async () => {
