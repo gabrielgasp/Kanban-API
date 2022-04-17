@@ -199,5 +199,20 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.data).toHaveLength(10)
       })
     })
+
+    describe('When trying to fetch with page that is greater than total pages', () => {
+      it('Should 200 with an empty array in the data property', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=7&limit=5')
+
+        expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(5)
+        expect(body.totalPages).toBe(6)
+        expect(body.currentPage).toBe(7)
+        expect(body.nextPage).toBeUndefined()
+        expect(body.previousPage).toBe(6)
+        expect(body.data).toEqual([])
+      })
+    })
   })
 })
