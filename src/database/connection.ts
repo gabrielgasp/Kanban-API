@@ -7,9 +7,10 @@ export const connectToDatabase = async (): Promise<void> => {
     await mongoose.connect(mongoURI)
     console.log('Database connection established')
     const db = mongoose.connection
+    // If the database is empty it will be seeded with mock data during the first connection.
     if (await db.collection('tasks').countDocuments() === 0) {
       await db.collection('tasks').insertMany(tasksSeed)
-      console.log('Database seeded')
+      console.log('Database seeded with 28 random tasks')
     }
   } catch (e) {
     console.error('Database connection failed')
