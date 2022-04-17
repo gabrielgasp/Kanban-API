@@ -19,7 +19,7 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
   }
 
   public async read (page: number, limit: number): Promise<PaginateResult<T>> {
-    return await this.model.paginate({}, { page, limit }) // Here we are using the paginate method of mongoose to paginate our data.
+    return await this.model.paginate({}, { page, limit }) // Here we are using the paginate method of paginate-v2 to paginate our data.
   }
 
   public async update (id: string, data: Partial<T>): Promise<T | null> {
