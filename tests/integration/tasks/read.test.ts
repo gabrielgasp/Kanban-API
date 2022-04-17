@@ -1,36 +1,37 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database'
+import tasksSeed from '../../../src/database/tasksSeed.json'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'
 
-const newTasks = [
-  {
-    boardId: 2,
-    status: 'todo',
-    title: 'task that I need to do',
-    priority: 1,
-  },
-  {
-    boardId: 1,
-    status: 'in_progress',
-    title: 'task that I am doing',
-    priority: 2,
-  },
-  {
-    boardId: 1,
-    status: 'in_progress',
-    title: 'task that I am also doing but is more important',
-    priority: 5,
-  },
-  {
-    boardId: 1,
-    status: 'done',
-    title: 'task that I have done',
-    priority: 3,
-  },
-]
+// const newTasks = [
+//   {
+//     boardId: 2,
+//     status: 'todo',
+//     title: 'task that I need to do',
+//     priority: 1,
+//   },
+//   {
+//     boardId: 1,
+//     status: 'in_progress',
+//     title: 'task that I am doing',
+//     priority: 2,
+//   },
+//   {
+//     boardId: 1,
+//     status: 'in_progress',
+//     title: 'task that I am also doing but is more important',
+//     priority: 5,
+//   },
+//   {
+//     boardId: 1,
+//     status: 'done',
+//     title: 'task that I have done',
+//     priority: 3,
+//   },
+// ]
 
 describe('Tasks Read endpoint integration tests', () => {
   let mongod: MongoMemoryServer;
@@ -47,31 +48,62 @@ describe('Tasks Read endpoint integration tests', () => {
   })
 
   describe('When there are no tasks in the collection', () => {
-    it('Should 200 with an empty array', async () => {
+    it('Should 200 with data property being an empty array', async () => {
       const { status, body } = await fetchEndpoint(endpoint)
 
       expect(status).toBe(200)
-      expect(body).toEqual([])
+      expect(body.data).toEqual([])
     })
   })
 
   describe('When there are tasks in the collection', () => {
     beforeAll(async () => {
-      await taskModel.insertMany(newTasks)
+      await taskModel.insertMany(tasksSeed)
     })
 
-    it('Should 200 with all tasks ordered by boardId, status and priority', async () => {
-      const { status, body } = await fetchEndpoint(endpoint)
+    describe('When fetching first page', () => {
+      it('Should 200 with data containing 5 tasks ordered by boardId, status and priority and nextPage with value 2', async () => {
+        const { status, body } = await fetchEndpoint(endpoint)
+  
+        expect(status).toBe(200)
+        expect(body.nextPage).toBe(2)
+        expect(body.previousPage).toBeUndefined()
+        expect(body.data).toHaveLength(5)
+        expect(body.data[0]).toHaveProperty('_id')
+        expect(body.data[0].boardId).toBe(1)
+        expect(body.data[0].status).toBe('backlog')
+        expect(body.data[0].priority).toBe(1)
+        expect(body.data[1]).toHaveProperty('_id')
+        expect(body.data[1].boardId).toBe(1)
+        expect(body.data[1].status).toBe('done')
+        expect(body.data[1].priority).toBe(4)
+        expect(body.data[2]).toHaveProperty('_id')
+        expect(body.data[2].boardId).toBe(1)
+        expect(body.data[2].status).toBe('in_progress')
+        expect(body.data[2].priority).toBe(5)
+      })
+    })
 
-      expect(status).toBe(200)
-      expect(body[0]).toHaveProperty('_id')
-      expect(body[0]).toMatchObject(newTasks[3])
-      expect(body[1]).toHaveProperty('_id')
-      expect(body[1]).toMatchObject(newTasks[2])
-      expect(body[2]).toHaveProperty('_id')
-      expect(body[2]).toMatchObject(newTasks[1])
-      expect(body[3]).toHaveProperty('_id')
-      expect(body[3]).toMatchObject(newTasks[0])
+    describe('When fetching second page', () => {
+      it('Should 200 with previousPage being 1 and nextPage being 3', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=2')
+
+        expect(status).toBe(200)
+        expect(body.nextPage).toBe(3)
+        expect(body.previousPage).toBe(1)
+        expect(body.data).toHaveLength(5)
+      })
+    })
+
+    describe('When fetching last page (6)', () => {
+      it('Should 200 with previousPage being 5 and nextPage being undefined', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=6')
+
+        expect(status).toBe(200)
+        expect(body.nextPage).toBeUndefined()
+        expect(body.previousPage).toBe(5)
+        expect(body.data).toHaveLength(3)
+      })
     })
   })
 })
