@@ -6,33 +6,6 @@ import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'
 
-// const newTasks = [
-//   {
-//     boardId: 2,
-//     status: 'todo',
-//     title: 'task that I need to do',
-//     priority: 1,
-//   },
-//   {
-//     boardId: 1,
-//     status: 'in_progress',
-//     title: 'task that I am doing',
-//     priority: 2,
-//   },
-//   {
-//     boardId: 1,
-//     status: 'in_progress',
-//     title: 'task that I am also doing but is more important',
-//     priority: 5,
-//   },
-//   {
-//     boardId: 1,
-//     status: 'done',
-//     title: 'task that I have done',
-//     priority: 3,
-//   },
-// ]
-
 describe('Tasks Read endpoint integration tests', () => {
   let mongod: MongoMemoryServer;
 
@@ -48,10 +21,14 @@ describe('Tasks Read endpoint integration tests', () => {
   })
 
   describe('When there are no tasks in the collection', () => {
-    it('Should 200 with data property being an empty array', async () => {
+    it('Should 200 with data property being an empty array and totalDocs property with value 0', async () => {
       const { status, body } = await fetchEndpoint(endpoint)
 
       expect(status).toBe(200)
+      expect(body.totalDocs).toBe(0)
+      expect(body.docsPerPage).toBe(10)
+      expect(body.totalPages).toBe(1)
+      expect(body.currentPage).toBe(1)
       expect(body.data).toEqual([])
     })
   })
@@ -61,11 +38,15 @@ describe('Tasks Read endpoint integration tests', () => {
       await taskModel.insertMany(tasksSeed)
     })
 
-    describe('When fetching first page', () => {
+    describe('When fetching first page with a limit of 5', () => {
       it('Should 200 with data containing 5 tasks ordered by boardId, status and priority and nextPage with value 2', async () => {
-        const { status, body } = await fetchEndpoint(endpoint)
+        const { status, body } = await fetchEndpoint(endpoint + '?page=1&limit=5')
   
         expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(5)
+        expect(body.totalPages).toBe(6)
+        expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
         expect(body.data).toHaveLength(5)
@@ -84,25 +65,48 @@ describe('Tasks Read endpoint integration tests', () => {
       })
     })
 
-    describe('When fetching second page', () => {
+    describe('When fetching second page with limit of 5', () => {
       it('Should 200 with previousPage being 1 and nextPage being 3', async () => {
-        const { status, body } = await fetchEndpoint(endpoint + '?page=2')
+        const { status, body } = await fetchEndpoint(endpoint + '?page=2&limit=5')
 
         expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(5)
+        expect(body.totalPages).toBe(6)
+        expect(body.currentPage).toBe(2)
         expect(body.nextPage).toBe(3)
         expect(body.previousPage).toBe(1)
         expect(body.data).toHaveLength(5)
       })
     })
 
-    describe('When fetching last page (6)', () => {
+    describe('When fetching last page with limit of 5', () => {
       it('Should 200 with previousPage being 5 and nextPage being undefined', async () => {
-        const { status, body } = await fetchEndpoint(endpoint + '?page=6')
+        const { status, body } = await fetchEndpoint(endpoint + '?page=6&limit=5')
 
         expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(5)
+        expect(body.totalPages).toBe(6)
+        expect(body.currentPage).toBe(6)
         expect(body.nextPage).toBeUndefined()
         expect(body.previousPage).toBe(5)
         expect(body.data).toHaveLength(3)
+      })
+    })
+
+    describe('When fetching first page with a limit greater than number of documents in collection', () => {
+      it('Should 200 with data containing all documents and have no previous nor next page property', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=1&limit=30')
+
+        expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(30)
+        expect(body.totalPages).toBe(1)
+        expect(body.currentPage).toBe(1)
+        expect(body.nextPage).toBeUndefined()
+        expect(body.previousPage).toBeUndefined()
+        expect(body.data).toHaveLength(28)
       })
     })
   })
