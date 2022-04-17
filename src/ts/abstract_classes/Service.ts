@@ -24,6 +24,7 @@ export abstract class AbstractService<T> implements IService<T> {
 
     // Here we are checking if the requested page is greater than the total number of pages for the provided limit based on our collection document count.
     if (pageNumber * limitNumber > documentCountInCollection) {
+      // If the requested page is indeed greater, we simply set the page to the last possible page.
       pageNumber = Math.ceil(documentCountInCollection / limitNumber)
     }
 
