@@ -1,9 +1,10 @@
-import mongoose from 'mongoose'
+import { Document, Schema, model, PaginateModel } from 'mongoose'
+import paginate from 'mongoose-paginate-v2'
 import { ITask } from '../../ts/interfaces'
 
-interface TaskDocument extends ITask, mongoose.Document {}
+interface TaskDocument extends ITask, Document {}
 
-const taskSchema = new mongoose.Schema<TaskDocument>({
+const taskSchema = new Schema<TaskDocument>({
   boardId: { type: Number, required: true }, // This type would probably be changed to ObjectId if we have a "boards" collection
   status: { type: String, required: true }, // This represents the column ex: "BACKLOG" | "IN_PROGRESS" | "DONE", etc.
   title: { type: String, required: true },
@@ -17,4 +18,6 @@ const taskSchema = new mongoose.Schema<TaskDocument>({
   versionKey: false
 })
 
-export const taskModel = mongoose.model('Task', taskSchema)
+taskSchema.plugin(paginate)
+
+export const taskModel = model<TaskDocument, PaginateModel<TaskDocument>>('Task', taskSchema, 'tasks')
