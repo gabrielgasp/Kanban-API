@@ -3,6 +3,5 @@ import { ITask } from '../entities'
 
 export interface ITasksRepository extends IRepository<ITask> {
   readFromBoard: (boardId: string) => Promise<ITask[]>
-  updateMembers: (id: string, operation: 1 | -1, value: string) => Promise<ITask | null>
-  updateTags: (id: string, operation: 1 | -1, value: string) => Promise<ITask | null>
+  updateMembers: (id: string, operation: '$addToSet' | '$pull', value: string) => Promise<ITask | null>
 }

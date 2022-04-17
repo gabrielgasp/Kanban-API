@@ -20,15 +20,31 @@ describe("TasksService updateMembers method unit tests", () => {
     mockTasksRepository.updateMembers = jest.fn().mockResolvedValue(fakeUpdatedTask)
   })
 
-  it("should call the updateMembers method of the repository with id, operation and value", async () => {
-    await taskService.updateMembers('1', 1, 'test')
+  describe('When operation is 1', () => {
+    it("should call the updateMembers method of the repository with id, $addToSet and value", async () => {
+      await taskService.updateMembers('1', 1, 'test')
+  
+      expect(mockTasksRepository.updateMembers).toHaveBeenCalledWith('1', '$addToSet', 'test')
+    })
 
-    expect(mockTasksRepository.updateMembers).toHaveBeenCalledWith('1', 1, 'test')
+    it("should return the result of the repository's updateMembers method", async () => {
+      const result = await taskService.updateMembers('1', 1, 'test')
+  
+      expect(result).toEqual(fakeUpdatedTask)
+    })
   })
 
-  it("should return the result of the repository's updateMembers method", async () => {
-    const result = await taskService.updateMembers('1', 1, 'test')
+  describe('When operation is -1', () => {
+    it("should call the updateMembers method of the repository with id, $pull and value", async () => {
+      await taskService.updateMembers('1', -1, 'test')
+  
+      expect(mockTasksRepository.updateMembers).toHaveBeenCalledWith('1', '$pull', 'test')
+    })
 
-    expect(result).toEqual(fakeUpdatedTask)
+    it("should return the result of the repository's updateMembers method", async () => {
+      const result = await taskService.updateMembers('1', -1, 'test')
+  
+      expect(result).toEqual(fakeUpdatedTask)
+    })
   })
 })

@@ -25,15 +25,15 @@ describe("TasksRepository updateMembers method unit tests", () => {
 
   })
 
-  describe('When operation is 1', () => {
+  describe('When operation is $addToSet', () => {
     it("should call the findByIdAndUpdate method of the model with id, $addToSet, value and option new: true", async () => {
-      await tasksRepository.updateMembers('1', 1, 'test')
+      await tasksRepository.updateMembers('1', "$addToSet", 'test')
   
       expect(mockTasksModel.findByIdAndUpdate).toHaveBeenCalledWith('1', { $addToSet: { members: 'test' } }, { new: true })
     })
 
     it("should return the result of the model's findByIdAndUpdate method", async () => {
-      const result = await tasksRepository.updateMembers('1', 1, 'test')
+      const result = await tasksRepository.updateMembers('1', '$addToSet', 'test')
   
       expect(result).toEqual({ ...fakeUpdatedTask, members: ['test'] })
     })
@@ -41,13 +41,13 @@ describe("TasksRepository updateMembers method unit tests", () => {
 
   describe('When operation is -1', () => {
     it("should call the findByIdAndUpdate method of the model with id, $pull, value and option new: true", async () => {
-      await tasksRepository.updateMembers('1', -1, 'test')
+      await tasksRepository.updateMembers('1', '$pull', 'test')
   
       expect(mockTasksModel.findByIdAndUpdate).toHaveBeenCalledWith('1', { $pull: { members: 'test' } }, { new: true })
     })
 
     it("should return the result of the model's findByIdAndUpdate method", async () => {
-      const result = await tasksRepository.updateMembers('1', -1, 'test')
+      const result = await tasksRepository.updateMembers('1', '$pull', 'test')
   
       expect(result).toEqual({ ...fakeUpdatedTask, members: [] })
     })

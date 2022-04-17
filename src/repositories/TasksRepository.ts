@@ -16,9 +16,8 @@ export class TasksRepository extends AbstractRepository<ITask> implements ITasks
   }
 
   // Here we create a new method exclusive to the TasksRepository class that will be used to update the members array.
-  public async updateMembers (id: string, operation: 1 | -1, value: string): Promise<ITask | null> {
-    const op = operation === 1 ? '$addToSet' : '$pull'
-    return await this.model.findByIdAndUpdate(id, { [op]: { members: value } }, { new: true })
+  public async updateMembers (id: string, operation: '$addToSet' | '$pull', value: string): Promise<ITask | null> {
+    return await this.model.findByIdAndUpdate(id, { [operation]: { members: value } }, { new: true })
   }
 
   // This is basically a copy of the updateMembers implementation.
