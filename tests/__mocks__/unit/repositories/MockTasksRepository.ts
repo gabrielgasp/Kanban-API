@@ -11,7 +11,6 @@ export class MockTasksRepository extends TasksRepository {
   // Here I override all methods from the original TasksRepository class
   // and turn them into empty mocks.
 
-  public countDocuments = jest.fn()
   public create = jest.fn()
   public read = jest.fn()
   public readFromBoard = jest.fn()

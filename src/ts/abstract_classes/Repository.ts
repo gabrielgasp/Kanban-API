@@ -10,10 +10,6 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
     protected readonly model: PaginateModel<T & Document> // Here we expect a mongoose model that follows the generic T interface to be injected.
   ) {}
 
-  public async countDocuments (): Promise<number> {
-    return await this.model.countDocuments()
-  }
-
   public async create (data: T): Promise<T> {
     return await this.model.create(data)
   }
