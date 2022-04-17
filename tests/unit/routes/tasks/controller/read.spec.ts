@@ -5,28 +5,34 @@ import { MockTasksService } from "../../../../__mocks__"
 const mockTasksService = new MockTasksService()
 const tasksController = new TasksController(mockTasksService)
 
-const fakeTaskResponse = [
-  {
-    _id: '1',
-    boardId: 1,
-    status: 'todo',
-    title: 'some todo task',
-    description: 'todo description',
-    priority: 1,
-    members: ['John', 'Jane'],
-    tags: ['not so important']
-  },
-  {
-    _id: '2',
-    boardId: 1,
-    status: 'in_progress',
-    title: 'some task in progress',
-    description: 'task in progress description',
-    priority: 1,
-    members: ['John', 'Jane'],
-    tags: ['important']
-  }
-]
+const fakeTaskResponse = {
+  totalDocs: 1,
+  docsPerPage: 5,
+  totalPages: 1,
+  currentPage: 1,
+  dosc: [
+    {
+      _id: '1',
+      boardId: 1,
+      status: 'todo',
+      title: 'some todo task',
+      description: 'todo description',
+      priority: 1,
+      members: ['John', 'Jane'],
+      tags: ['not so important']
+    },
+    {
+      _id: '2',
+      boardId: 1,
+      status: 'in_progress',
+      title: 'some task in progress',
+      description: 'task in progress description',
+      priority: 1,
+      members: ['John', 'Jane'],
+      tags: ['important']
+    }
+  ]
+}
 
 describe("TasksController read method unit tests", () => {
   const mockReq = {} as Request
@@ -42,12 +48,12 @@ describe("TasksController read method unit tests", () => {
     mockRes.json = jest.fn()
   })
 
-  mockReq.query = { page: '1' }
+  mockReq.query = { page: '1', limit: '5' }
 
   it("should call the read method of the service with query.page", async () => {
     await tasksController.read(mockReq, mockRes)
 
-    expect(mockTasksService.read).toHaveBeenCalledWith(mockReq.query.page)
+    expect(mockTasksService.read).toHaveBeenCalledWith(mockReq.query.page, mockReq.query.limit)
   })
 
   it("should call res.status with 200 and res.json with the result of service's read method", async () => {

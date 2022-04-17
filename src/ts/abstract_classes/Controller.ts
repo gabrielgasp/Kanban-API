@@ -21,7 +21,8 @@ export abstract class Controller<T> implements IController {
   }
 
   public async read (req: Request, res: Response): Promise<Response> {
-    const result = await this.service.read(req.query.page as string | undefined)
+    const { page, limit } = req.query
+    const result = await this.service.read(page as string | undefined, limit as string | undefined)
     return res.status(200).json(result)
   }
 
