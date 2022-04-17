@@ -21,8 +21,7 @@ export class TasksRepository extends AbstractRepository<ITask> implements ITasks
   }
 
   // This is basically a copy of the updateMembers implementation.
-  public async updateTags (id: string, operation: 1 | -1, value: string): Promise<ITask | null> {
-    const op = operation === 1 ? '$addToSet' : '$pull'
-    return await this.model.findByIdAndUpdate(id, { [op]: { tags: value } }, { new: true })
+  public async updateTags (id: string, operation: '$addToSet' | '$pull', value: string): Promise<ITask | null> {
+    return await this.model.findByIdAndUpdate(id, { [operation]: { tags: value } }, { new: true })
   }
 }

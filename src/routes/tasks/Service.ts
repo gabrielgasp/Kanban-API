@@ -26,6 +26,7 @@ export class TasksService extends AbstractService<ITask> implements ITasksServic
 
   // This is basically a copy of the updateMembers implementation.
   public async updateTags (id: string, operation: 1 | -1, value: string): Promise<ITask | null> {
-    return await this.repository.updateTags(id, operation, value)
+    const op = operation === 1 ? '$addToSet' : '$pull'
+    return await this.repository.updateTags(id, op, value)
   }
 }

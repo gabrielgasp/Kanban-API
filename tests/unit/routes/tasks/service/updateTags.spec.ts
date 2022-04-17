@@ -20,15 +20,31 @@ describe("TasksService updateTags method unit tests", () => {
     mockTasksRepository.updateTags = jest.fn().mockResolvedValue(fakeUpdatedTask)
   })
 
-  it("should call the updateTags method of the repository with id, operation and value", async () => {
-    await taskService.updateTags('1', 1, 'test')
+  describe('When operation is 1', () => {
+    it("should call the updateTags method of the repository with id, $addToSet and value", async () => {
+      await taskService.updateTags('1', 1, 'test')
+  
+      expect(mockTasksRepository.updateTags).toHaveBeenCalledWith('1', '$addToSet', 'test')
+    })
 
-    expect(mockTasksRepository.updateTags).toHaveBeenCalledWith('1', 1, 'test')
+    it("should return the result of the repository's updateTags method", async () => {
+      const result = await taskService.updateTags('1', 1, 'test')
+  
+      expect(result).toEqual(fakeUpdatedTask)
+    })
   })
 
-  it("should return the result of the repository's updateTags method", async () => {
-    const result = await taskService.updateTags('1', 1, 'test')
+  describe('When operation is -1', () => {
+    it("should call the updateTags method of the repository with id, $pull and value", async () => {
+      await taskService.updateTags('1', -1, 'test')
+  
+      expect(mockTasksRepository.updateTags).toHaveBeenCalledWith('1', '$pull', 'test')
+    })
 
-    expect(result).toEqual(fakeUpdatedTask)
+    it("should return the result of the repository's updateTags method", async () => {
+      const result = await taskService.updateTags('1', -1, 'test')
+  
+      expect(result).toEqual(fakeUpdatedTask)
+    })
   })
 })
