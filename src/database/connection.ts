@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { taskModel } from './models'
 import tasksSeed from './tasksSeed.json'
 
 export const connectToDatabase = async (): Promise<void> => {
@@ -6,10 +7,9 @@ export const connectToDatabase = async (): Promise<void> => {
     const mongoURI = process.env.MONGO_URI ?? 'mongodb://localhost:27017/mamboo-kanban-api'
     await mongoose.connect(mongoURI)
     console.log('Database connection established')
-    const db = mongoose.connection
-    // If the database is empty it will be seeded with mock data during the first connection.
-    if (await db.collection('tasks').countDocuments() === 0) {
-      await db.collection('tasks').insertMany(tasksSeed)
+    // If the tasks collection is empty it will be seeded with mock data during the first connection.
+    if (await taskModel.countDocuments() === 0) {
+      await taskModel.insertMany(tasksSeed)
       console.log('Database seeded with 28 random tasks')
     }
   } catch (e) {
