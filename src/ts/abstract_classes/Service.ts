@@ -31,8 +31,6 @@ export abstract class AbstractService<T> implements IService<T> {
     // Here we are fetching the paginated data from the database.
     const paginatedData = await this.repository.read(pageNumber, limitNumber)
 
-    // if (paginatedData.data === []) paginatedData = await this.repository.read(paginatedData.totalPages, limitNumber)
-
     return {
       totalDocs: paginatedData.totalDocs,
       docsPerPage: paginatedData.limit,
