@@ -1,4 +1,8 @@
 export interface serviceReadResponse<T> {
+  totalDocs: number
+  docsPerPage: number
+  totalPages: number
+  currentPage?: number
   previousPage?: number
   nextPage?: number
   data: T[]

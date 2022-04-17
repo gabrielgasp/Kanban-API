@@ -4,51 +4,69 @@ import { MockTasksRepository } from "../../../../__mocks__"
 const mockTasksRepository = new MockTasksRepository()
 const tasksService = new TasksService(mockTasksRepository)
 
-const fakeTaskResponse = [
-  {
-    _id: '1',
-    boardId: 1,
-    status: 'todo',
-    title: 'some todo task',
-    description: 'todo description',
-    priority: 1,
-    members: ['John', 'Jane'],
-    tags: ['not so important']
-  },
-  {
-    _id: '2',
-    boardId: 1,
-    status: 'in_progress',
-    title: 'some task in progress',
-    description: 'task in progress description',
-    priority: 1,
-    members: ['John', 'Jane'],
-    tags: ['important']
-  }
-]
+const fakeRepositoryResponse = {
+  docs: [
+    {
+      _id: '1',
+      boardId: 1,
+      status: 'todo',
+      title: 'some todo task',
+      description: 'todo description',
+      priority: 1,
+      members: ['John', 'Jane'],
+      tags: ['not so important']
+    },
+    {
+      _id: '2',
+      boardId: 2,
+      status: 'in_progress',
+      title: 'some task in progress',
+      description: 'task in progress description',
+      priority: 1,
+      members: ['John', 'Jane'],
+      tags: ['important']
+    }
+  ],
+  totalDocs: 2,
+  limit: 10,
+  page: 1,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPrevPage: false,
+}
 
 describe("TasksService read method unit tests", () => {
   beforeAll(() => {
-    mockTasksRepository.read = jest.fn().mockResolvedValue(fakeTaskResponse) // mock the return value of the tasksRepository.read method
-    mockTasksRepository.countDocuments = jest.fn() // Here we are mocking the return on countDocuments method according to what the test needs.
-    .mockResolvedValueOnce(20) // First call
-    .mockResolvedValueOnce(20) // Second call
-    .mockResolvedValueOnce(20) // Third call
-    .mockResolvedValueOnce(20) // Fourth call
-    .mockResolvedValueOnce(9) // Fifth call
+    mockTasksRepository.read = jest.fn()  // mock the return value of the tasksRepository.read method with whatever the test needs.
+    .mockResolvedValueOnce(fakeRepositoryResponse)
+    .mockResolvedValueOnce(fakeRepositoryResponse)
+    .mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 2, hasPrevPage: true, prevPage: 1 })
+    .mockResolvedValueOnce(fakeRepositoryResponse)
+    .mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 1, hasNextPage: true, nextPage: 2 })
+    .mockResolvedValueOnce(fakeRepositoryResponse)
   })
 
-  it("should call the read method of the repository with skip and limit arguments", async () => {
+  it("should call the read method of the repository with page and limit arguments", async () => {
     await tasksService.read('1', '5')
 
-    expect(mockTasksRepository.read).toHaveBeenCalledWith(0, 5)
+    expect(mockTasksRepository.read).toHaveBeenCalledWith(1, 5)
+  })
+
+  it("should return the data and properties of the repository's read method response", async () => {
+    const result = await tasksService.read('1', '5')
+
+    expect(result.data).toEqual(fakeRepositoryResponse.docs)
+    expect(result.totalDocs).toBe(fakeRepositoryResponse.totalDocs)
+    expect(result.docsPerPage).toBe(fakeRepositoryResponse.limit)
+    expect(result.currentPage).toBe(fakeRepositoryResponse.page)
+    expect(result.totalPages).toBe(fakeRepositoryResponse.totalPages)
   })
 
   describe('When there is a previous page', () => {
-    it('should return an object with property data and property previousPage', async () => {
+    it('should return an object with previousPage property and value', async () => {
       const result = await tasksService.read('2', '5')
 
-      expect(result).toMatchObject({ data: fakeTaskResponse, previousPage: 1 })
+      expect(result.previousPage).toBe(1)
     })
   })
 
@@ -56,7 +74,7 @@ describe("TasksService read method unit tests", () => {
     it('should return an object with property data and no property previousPage', async () => {
       const result = await tasksService.read('1', '5')
 
-      expect(result).toMatchObject({ data: fakeTaskResponse, previousPage: undefined })
+      expect(result.previousPage).toBeUndefined()
     })
   })
 
@@ -64,7 +82,7 @@ describe("TasksService read method unit tests", () => {
     it('should return an object with property data and property nextPage', async () => {
       const result = await tasksService.read('1', '5')
 
-      expect(result).toMatchObject({ data: fakeTaskResponse, nextPage: 2 })
+      expect(result.nextPage).toBe(2)
     })
   })
 
@@ -72,7 +90,7 @@ describe("TasksService read method unit tests", () => {
     it('should return an object with property data and no property nextPage', async () => {
       const result = await tasksService.read('2', '5')
 
-      expect(result).toMatchObject({ data: fakeTaskResponse, nextPage: undefined })
+      expect(result.nextPage).toBeUndefined()
     })
   })
 })
