@@ -65,7 +65,7 @@ describe("TasksService read method unit tests", () => {
 
     const result = await tasksService.read('1', '5')
 
-    expect(result.data).toEqual(fakeRepositoryResponse.docs)
+    expect(result.docs).toEqual(fakeRepositoryResponse.docs)
     expect(result.totalDocs).toBe(fakeRepositoryResponse.totalDocs)
     expect(result.docsPerPage).toBe(fakeRepositoryResponse.limit)
     expect(result.currentPage).toBe(fakeRepositoryResponse.page)
@@ -85,7 +85,7 @@ describe("TasksService read method unit tests", () => {
 
   describe('When there is no previousPage', () => {
     mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
-    it('should return an object with property data and no property previousPage', async () => {
+    it('should return an object with property docs and no property previousPage', async () => {
       mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
 
       const result = await tasksService.read('1', '5')
@@ -95,7 +95,7 @@ describe("TasksService read method unit tests", () => {
   })
 
   describe('When there is a next page', () => {
-    it('should return an object with property data and property nextPage', async () => {
+    it('should return an object with property docs and property nextPage', async () => {
       mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
       mockTasksRepository.read.mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 1, hasNextPage: true, nextPage: 2 })
 
@@ -106,7 +106,7 @@ describe("TasksService read method unit tests", () => {
   })
 
   describe('When there is no nextPage', () => {
-    it('should return an object with property data and no property nextPage', async () => {
+    it('should return an object with property docs and no property nextPage', async () => {
       mockTasksRepository.countDocuments.mockResolvedValueOnce(9)
       mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
 

@@ -21,7 +21,7 @@ describe('Tasks Read endpoint integration tests', () => {
   })
 
   describe('When there are no tasks in the collection', () => {
-    it('Should 200 with data property being an empty array and totalDocs property with value 0', async () => {
+    it('Should 200 with docs property being an empty array and totalDocs property with value 0', async () => {
       const { status, body } = await fetchEndpoint(endpoint)
 
       expect(status).toBe(200)
@@ -29,7 +29,7 @@ describe('Tasks Read endpoint integration tests', () => {
       expect(body.docsPerPage).toBe(10)
       expect(body.totalPages).toBe(1)
       expect(body.currentPage).toBe(1)
-      expect(body.data).toEqual([])
+      expect(body.docs).toEqual([])
     })
   })
 
@@ -39,7 +39,7 @@ describe('Tasks Read endpoint integration tests', () => {
     })
 
     describe('When fetching first page with a limit of 5', () => {
-      it('Should 200 with data containing 5 tasks ordered by boardId, status and priority and nextPage with value 2', async () => {
+      it('Should 200 with docs containing 5 tasks ordered by boardId, status and priority and nextPage with value 2', async () => {
         const { status, body } = await fetchEndpoint(endpoint + '?page=1&limit=5')
   
         expect(status).toBe(200)
@@ -49,19 +49,19 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(5)
-        expect(body.data[0]).toHaveProperty('_id')
-        expect(body.data[0].boardId).toBe(1)
-        expect(body.data[0].status).toBe('BACKLOG')
-        expect(body.data[0].priority).toBe(5)
-        expect(body.data[1]).toHaveProperty('_id')
-        expect(body.data[1].boardId).toBe(1)
-        expect(body.data[1].status).toBe('BACKLOG')
-        expect(body.data[1].priority).toBe(2)
-        expect(body.data[2]).toHaveProperty('_id')
-        expect(body.data[2].boardId).toBe(1)
-        expect(body.data[2].status).toBe('IN_PROGRESS')
-        expect(body.data[2].priority).toBe(3)
+        expect(body.docs).toHaveLength(5)
+        expect(body.docs[0]).toHaveProperty('_id')
+        expect(body.docs[0].boardId).toBe(1)
+        expect(body.docs[0].status).toBe('BACKLOG')
+        expect(body.docs[0].priority).toBe(5)
+        expect(body.docs[1]).toHaveProperty('_id')
+        expect(body.docs[1].boardId).toBe(1)
+        expect(body.docs[1].status).toBe('BACKLOG')
+        expect(body.docs[1].priority).toBe(2)
+        expect(body.docs[2]).toHaveProperty('_id')
+        expect(body.docs[2].boardId).toBe(1)
+        expect(body.docs[2].status).toBe('IN_PROGRESS')
+        expect(body.docs[2].priority).toBe(3)
       })
     })
 
@@ -76,7 +76,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(2)
         expect(body.nextPage).toBe(3)
         expect(body.previousPage).toBe(1)
-        expect(body.data).toHaveLength(5)
+        expect(body.docs).toHaveLength(5)
       })
     })
 
@@ -91,12 +91,12 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(6)
         expect(body.nextPage).toBeUndefined()
         expect(body.previousPage).toBe(5)
-        expect(body.data).toHaveLength(3)
+        expect(body.docs).toHaveLength(3)
       })
     })
 
     describe('When fetching first page with a limit greater than number of documents in collection', () => {
-      it('Should 200 with data containing all documents and have no previous nor next page property', async () => {
+      it('Should 200 with docs containing all documents and have no previous nor next page property', async () => {
         const { status, body } = await fetchEndpoint(endpoint + '?page=1&limit=30')
 
         expect(status).toBe(200)
@@ -106,7 +106,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBeUndefined()
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(28)
+        expect(body.docs).toHaveLength(28)
       })
     })
 
@@ -121,7 +121,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(5)
+        expect(body.docs).toHaveLength(5)
       })
     })
 
@@ -136,7 +136,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(10)
+        expect(body.docs).toHaveLength(10)
       })
     })
 
@@ -151,7 +151,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(5)
+        expect(body.docs).toHaveLength(5)
       })
     })
 
@@ -166,7 +166,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(10)
+        expect(body.docs).toHaveLength(10)
       })
     })
 
@@ -181,7 +181,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(5)
+        expect(body.docs).toHaveLength(5)
       })
     })
 
@@ -196,7 +196,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(1)
         expect(body.nextPage).toBe(2)
         expect(body.previousPage).toBeUndefined()
-        expect(body.data).toHaveLength(10)
+        expect(body.docs).toHaveLength(10)
       })
     })
 
@@ -211,7 +211,7 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.currentPage).toBe(6)
         expect(body.nextPage).toBeUndefined()
         expect(body.previousPage).toBe(5)
-        expect(body.data).toHaveLength(3)
+        expect(body.docs).toHaveLength(3)
       })
     })
   })

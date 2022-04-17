@@ -38,7 +38,7 @@ export abstract class AbstractService<T> implements IService<T> {
       currentPage: paginatedData.page,
       previousPage: paginatedData.hasPrevPage ? paginatedData.prevPage as number : undefined,
       nextPage: paginatedData.hasNextPage ? paginatedData.nextPage as number : undefined,
-      data: paginatedData.docs
+      docs: paginatedData.docs
     }
   }
 

@@ -5,7 +5,7 @@ export interface serviceReadResponse<T> {
   currentPage?: number
   previousPage?: number
   nextPage?: number
-  data: T[]
+  docs: T[]
 }
 
 export interface IService<T> {
