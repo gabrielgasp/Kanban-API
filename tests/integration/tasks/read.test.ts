@@ -169,5 +169,35 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.data).toHaveLength(10)
       })
     })
+
+    describe('When trying to fetch with page that can not be parsed into a number', () => {
+      it('Should 200 with response using page 1 as default', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=a&limit=5')
+
+        expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(5)
+        expect(body.totalPages).toBe(6)
+        expect(body.currentPage).toBe(1)
+        expect(body.nextPage).toBe(2)
+        expect(body.previousPage).toBeUndefined()
+        expect(body.data).toHaveLength(5)
+      })
+    })
+
+    describe('When trying to fetch with limit that can not be parsed into a number', () => {
+      it('Should 200 with response using limit 10 as default', async () => {
+        const { status, body } = await fetchEndpoint(endpoint + '?page=1&limit=a')
+
+        expect(status).toBe(200)
+        expect(body.totalDocs).toBe(28)
+        expect(body.docsPerPage).toBe(10)
+        expect(body.totalPages).toBe(3)
+        expect(body.currentPage).toBe(1)
+        expect(body.nextPage).toBe(2)
+        expect(body.previousPage).toBeUndefined()
+        expect(body.data).toHaveLength(10)
+      })
+    })
   })
 })
