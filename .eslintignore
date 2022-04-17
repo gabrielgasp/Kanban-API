@@ -3,3 +3,4 @@ build
 tests
 jest*
 coverage
+src/swagger.json

@@ -1,6 +1,8 @@
 import 'dotenv/config'
 import express, { Express } from 'express'
 import 'express-async-errors' // This is a lib that will automatically catch all async errors and send them to the error handler
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swagger.json'
 import { errorHandler } from './middlewares'
 import { routersFactory } from './Factory'
 
@@ -12,7 +14,9 @@ app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // A
 
 app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
-app.get('/', (_req, res) => res.redirect('/tasks')) // Redirect from "/" to "/tasks"
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)) // Apply swagger to route /docs for interactive documentation.
+
+app.get('/', (_req, res) => res.redirect('/docs')) // Redirect from "/" to "/tasks"
 
 app.use(errorHandler) // Receive errors when next(error) is called
 

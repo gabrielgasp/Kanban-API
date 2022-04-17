@@ -5,6 +5,6 @@ describe('GET to "/"', () => {
     const { status, header } = await fetchEndpoint('/')
 
     expect(status).toBe(302)
-    expect(header.location).toBe('/tasks')
+    expect(header.location).toBe('/docs')
   })
 })
