@@ -20,16 +20,16 @@ export abstract class AbstractService<T> implements IService<T> {
     const limitNumber = parseInt(limit) > 0 ? parseInt(limit) : 10
 
     // Here we are fetching the paginated data from the database.
-    const paginationData = await this.repository.read(pageNumber, limitNumber)
+    const paginatedData = await this.repository.read(pageNumber, limitNumber)
 
     return {
-      totalDocs: paginationData.totalDocs,
-      docsPerPage: paginationData.limit,
-      totalPages: paginationData.totalPages,
-      currentPage: paginationData.page,
-      previousPage: paginationData.hasPrevPage ? paginationData.prevPage as number : undefined,
-      nextPage: paginationData.hasNextPage ? paginationData.nextPage as number : undefined,
-      data: paginationData.docs
+      totalDocs: paginatedData.totalDocs,
+      docsPerPage: paginatedData.limit,
+      totalPages: paginatedData.totalPages,
+      currentPage: paginatedData.page,
+      previousPage: paginatedData.hasPrevPage ? paginatedData.prevPage as number : undefined,
+      nextPage: paginatedData.hasNextPage ? paginatedData.nextPage as number : undefined,
+      data: paginatedData.docs
     }
   }
 
