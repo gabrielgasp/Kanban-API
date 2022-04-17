@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose'
+import { PaginateModel, Document, PaginateResult } from 'mongoose'
 import { IRepository } from '../interfaces'
 
 // Repository is where we abstract our database interactions.
@@ -7,7 +7,7 @@ import { IRepository } from '../interfaces'
 // the database (or ORM/ODM) we use.
 export abstract class AbstractRepository<T> implements IRepository<T> {
   constructor (
-    protected readonly model: Model<T & Document> // Here we expect a mongoose model that follows the generic T interface to be injected.
+    protected readonly model: PaginateModel<T & Document> // Here we expect a mongoose model that follows the generic T interface to be injected.
   ) {}
 
   public async countDocuments (): Promise<number> {
@@ -18,8 +18,9 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
     return await this.model.create(data)
   }
 
-  public async read (skip: number, limit: number): Promise<T[]> {
-    return await this.model.find().skip(skip).limit(limit) // Here we are doing pagination based on parameters received.
+  public async read (page: number, limit: number): Promise<PaginateResult<T>> {
+    return await this.model.paginate({}, { page, limit })
+    // return await this.model.find().skip(skip).limit(limit) // Here we are doing pagination based on parameters received.
   }
 
   public async update (id: string, data: Partial<T>): Promise<T | null> {
