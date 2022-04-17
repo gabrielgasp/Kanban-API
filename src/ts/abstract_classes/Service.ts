@@ -23,6 +23,7 @@ export abstract class AbstractService<T> implements IService<T> {
 
     const previousPage: number | undefined = skip > 0 ? pageNumber - 1 : undefined // Here we are defining the previousPage value (if any).
     const nextPage: number | undefined = skip + limitNumber < count ? pageNumber + 1 : undefined // Here we are defining the nextPage value (if any).
+    // If the quantity of skipped documents + what we are currently showing is less than the total number of documents, then we have a next page.
 
     const data = await this.repository.read(skip, limitNumber) // Here we are reading the data from the database.
 
