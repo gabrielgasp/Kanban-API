@@ -36,23 +36,33 @@ const fakeRepositoryResponse = {
 }
 
 describe("TasksService read method unit tests", () => {
-  beforeAll(() => {
-    mockTasksRepository.read = jest.fn()  // mock the return value of the tasksRepository.read method with whatever the test needs.
-    .mockResolvedValueOnce(fakeRepositoryResponse)
-    .mockResolvedValueOnce(fakeRepositoryResponse)
-    .mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 2, hasPrevPage: true, prevPage: 1 })
-    .mockResolvedValueOnce(fakeRepositoryResponse)
-    .mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 1, hasNextPage: true, nextPage: 2 })
-    .mockResolvedValueOnce(fakeRepositoryResponse)
+  beforeEach(() => { // Here we reset our mock stored data before each test to make sure our assertions are reliable.
+    mockTasksRepository.read.mockReset()
+    mockTasksRepository.countDocuments.mockReset()
   })
 
   it("should call the read method of the repository with page and limit arguments", async () => {
+    mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
+    mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
     await tasksService.read('1', '5')
 
     expect(mockTasksRepository.read).toHaveBeenCalledWith(1, 5)
   })
 
+  it('Should call the countDocuments method of the repository with no arguments', async () => {
+    mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
+    mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
+    await tasksService.read('1', '5')
+
+    expect(mockTasksRepository.countDocuments).toHaveBeenCalledWith()
+  })
+
   it("should return the data and properties of the repository's read method response", async () => {
+    mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
+    mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
     const result = await tasksService.read('1', '5')
 
     expect(result.data).toEqual(fakeRepositoryResponse.docs)
@@ -64,6 +74,9 @@ describe("TasksService read method unit tests", () => {
 
   describe('When there is a previous page', () => {
     it('should return an object with previousPage property and value', async () => {
+      mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
+      mockTasksRepository.read.mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 2, hasPrevPage: true, prevPage: 1 })
+
       const result = await tasksService.read('2', '5')
 
       expect(result.previousPage).toBe(1)
@@ -71,7 +84,10 @@ describe("TasksService read method unit tests", () => {
   })
 
   describe('When there is no previousPage', () => {
+    mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
     it('should return an object with property data and no property previousPage', async () => {
+      mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
       const result = await tasksService.read('1', '5')
 
       expect(result.previousPage).toBeUndefined()
@@ -80,6 +96,9 @@ describe("TasksService read method unit tests", () => {
 
   describe('When there is a next page', () => {
     it('should return an object with property data and property nextPage', async () => {
+      mockTasksRepository.countDocuments.mockResolvedValueOnce(30)
+      mockTasksRepository.read.mockResolvedValueOnce({ ...fakeRepositoryResponse, page: 1, hasNextPage: true, nextPage: 2 })
+
       const result = await tasksService.read('1', '5')
 
       expect(result.nextPage).toBe(2)
@@ -88,9 +107,23 @@ describe("TasksService read method unit tests", () => {
 
   describe('When there is no nextPage', () => {
     it('should return an object with property data and no property nextPage', async () => {
+      mockTasksRepository.countDocuments.mockResolvedValueOnce(9)
+      mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
       const result = await tasksService.read('2', '5')
 
       expect(result.nextPage).toBeUndefined()
+    })
+  })
+
+  describe('When requested page is greater than totalPages', () => {
+    it('should call repository read method with last page possible given the limit provided and collection document count', async () => {
+      mockTasksRepository.countDocuments.mockResolvedValueOnce(9)
+      mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
+
+      const result = await tasksService.read('3', '5')
+
+      expect(mockTasksRepository.read).toHaveBeenCalledWith(2, 5)
     })
   })
 })

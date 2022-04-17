@@ -14,13 +14,23 @@ export abstract class AbstractService<T> implements IService<T> {
 
   public async read (page: string = '1', limit: string = '10'): Promise<serviceReadResponse<T>> {
     // Here we are defining the requested page as number after doing some checks to make sure we always have a valid page value.
-    const pageNumber = parseInt(page) > 0 ? parseInt(page) : 1
+    let pageNumber = parseInt(page) > 0 ? parseInt(page) : 1
 
     // Here we are defining the requested limit as number after doing some checks to make sure we always have a valid limit value.
     const limitNumber = parseInt(limit) > 0 ? parseInt(limit) : 10
 
+    // Here we are counting the number of documents in the collection. We will use this information for a last check before our query.
+    const documentCountInCollection = await this.repository.countDocuments()
+
+    // Here we are checking if the requested page is greater than the total number of pages for the provided limit based on our collection document count.
+    if (pageNumber * limitNumber > documentCountInCollection) {
+      pageNumber = Math.ceil(documentCountInCollection / limitNumber)
+    }
+
     // Here we are fetching the paginated data from the database.
     const paginatedData = await this.repository.read(pageNumber, limitNumber)
+
+    // if (paginatedData.data === []) paginatedData = await this.repository.read(paginatedData.totalPages, limitNumber)
 
     return {
       totalDocs: paginatedData.totalDocs,
