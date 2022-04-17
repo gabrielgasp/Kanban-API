@@ -6,7 +6,8 @@ import { ITask, ITasksRepository } from '../ts/interfaces'
 // It has the same methods as the abstract Repository class, but it uses the "taskModel" provided as argument to the constructor;
 // If needed, we can add additional methods or override the ones from the abstract class (polymorphism).
 export class TasksRepository extends AbstractRepository<ITask> implements ITasksRepository {
-  public async read (page: number, limit: number): Promise<PaginateResult<ITask>> { // Here I'm overriding the read method from the abstract class so that we can return paginated and sorted tasks.
+  // Here I'm overriding the read method from the abstract class so that we can return paginated and sorted tasks.
+  public async read (page: number, limit: number): Promise<PaginateResult<ITask>> {
     return await this.model.paginate({}, { page, limit, sort: { boardId: 1, status: 1, priority: -1 } })
   }
 
