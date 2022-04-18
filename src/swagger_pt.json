@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Mamboo Kanban API",
-    "description": "Essa API foi desenvolvida como teste técnico do processo seletivo para a vaga de desenvolvedor backend pleno da empresa Mamboo.<br><br>Abaixo você irá encontrar toda a documentação referente ao funcionamento e utilização da API em questão.",
+    "description": "Este projeto foi desenvolvido como teste técnico do processo seletivo para a vaga de desenvolvedor backend da empresa Mamboo.<br><br>Esta API é um CRUD de tarefas de uma aplicação de quadro kanban.<br><br>Abaixo você irá encontrar toda a documentação referente ao funcionamento e utilização da API.<br><br>Looking for the english documentation? Try `/docs/en` 😉.",
     "contact": {
       "email": "gabrielgaspar447@gmail.com"
     },
@@ -15,8 +15,7 @@
   ],
   "tags": [
     {
-      "name": "tasks",
-      "description": "CRUD de tarefas de uma aplicação de quadro kanban."
+      "name": "tasks"
     }
   ],
   "paths": {
@@ -114,7 +113,7 @@
           {
             "in": "query",
             "name": "page",
-            "description": "Define a pagina que será exibida. Caso não seja informado uma pagina, será exibida a primeira.",
+            "description": "Define a pagina que será exibida. A primeira página será exibida caso não seja informada.",
             "schema": {
               "type": "integer",
               "example": 1
@@ -123,16 +122,16 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Define a quantidade de documentos por pagina. Caso não seja informado um valor, será usado o valor 10 como padrão.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
+            "description": "Define a quantidade de documentos por pagina. Serão exibidos 10 documentos por página caso não seja informado.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
             "schema": {
-              "type": "string",
+              "type": "integer",
               "example": 10
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Objeto com informações da paginação e lista com todas as tarefas de forma ordenada por boardId, status e priority e paginada utilizando os parametros informados ou valores padrões.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
+            "description": "Objeto com informações da paginação e lista de tarefas de forma ordenada por boardId, status e priority, e paginada utilizando os parametros informados ou valores padrão.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
             "content": {
               "application/json": {
                 "schema": {
@@ -202,7 +201,7 @@
           }
         ],
         "requestBody": {
-          "description": "No body deverão ser informadas as propriedades que serão atualizadas e seus novos valores. Não é necessário informar propriedades que não serão atualizadas.<br>ATENÇÃO: Ao atualizar as propriedades \"members\" e \"tags\" através deste endpoint os arrays serão completamente sobreescritos. Caso queira apenas adicionar ou remover valores, utilize os endpoints \"/tasks/{taskId}/members\" e \"/tasks/{taskId}/tags\" respectivamente.",
+          "description": "No body deverão ser informadas as propriedades que serão atualizadas e seus novos valores. Não é necessário informar propriedades que não serão atualizadas.<br><br>ATENÇÃO: Ao atualizar as propriedades \"members\" e \"tags\" através deste endpoint os arrays serão completamente sobreescritos. Caso queira apenas adicionar ou remover valores, utilize os endpoints `/tasks/{taskId}/members` e `/tasks/{taskId}/tags` respectivamente.",
           "content": {
             "application/json": {
               "schema": {
@@ -255,7 +254,7 @@
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "Não foi encontrada uma tarefa com o id informado.",
             "content": {
               "application/json": {
                 "schema": {
@@ -324,7 +323,7 @@
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "Não foi encontrada uma tarefa com o id informado.",
             "content": {
               "application/json": {
                 "schema": {
@@ -396,6 +395,22 @@
               }
             }
           },
+          "404": {
+            "description": "Não foi encontrada nenhuma tarefa para o boardId informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No tasks were found for the boardId provided, please make sure that the board exist and have tasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "500": {
             "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
             "content": {
@@ -429,7 +444,7 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar ou -1 para remover) e o membro que gostaria de adicionar/remover da lista de membros.",
+          "description": "Informe o tipo de operação (`1` para adicionar ou `-1` para remover) e o membro que gostaria de adicionar/remover da lista de membros.",
           "content": {
             "application/json": {
               "schema": {
@@ -485,7 +500,7 @@
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "Não foi encontrada uma tarefa com o id informado.",
             "content": {
               "application/json": {
                 "schema": {
@@ -527,7 +542,7 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar ou -1 para remover) e a tag que gostaria de adicionar/remover da lista de tags.",
+          "description": "Informe o tipo de operação (`1` para adicionar ou `-1` para remover) e a tag que gostaria de adicionar/remover da lista de tags.",
           "content": {
             "application/json": {
               "schema": {
@@ -584,7 +599,7 @@
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "Não foi encontrada uma tarefa com o id informado.",
             "content": {
               "application/json": {
                 "schema": {

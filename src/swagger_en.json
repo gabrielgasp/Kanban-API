@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Mamboo Kanban API",
-    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API.<br><br>Looking for the portuguese documentation? Try `/docs/pt`",
+    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API.<br><br>Procurando a documentação em português? Tente `/docs/pt` 😉.",
     "contact": {
       "email": "gabrielgaspar447@gmail.com"
     },
@@ -124,7 +124,7 @@
             "name": "limit",
             "description": "Defines the number of documents per page. 10 documents will be displayed per page if this parameter is not provided.<br>Keep in mind that changing the limit also affects the total number of pages.",
             "schema": {
-              "type": "string",
+              "type": "integer",
               "example": 10
             }
           }
@@ -444,7 +444,7 @@
           }
         ],
         "requestBody": {
-          "description": "Provide the type of operation (1 to add or -1 to remove) and the member you wish to add/remove to/from the members list.",
+          "description": "Provide the type of operation (`1` to add or `-1` to remove) and the member you wish to add/remove to/from the members list.",
           "content": {
             "application/json": {
               "schema": {
@@ -542,7 +542,7 @@
           }
         ],
         "requestBody": {
-          "description": "Provide the type of operation (1 to add or -1 to remove) and the tag you wish to add/remove to/from the tags list.",
+          "description": "Provide the type of operation (`1` to add or `-1` to remove) and the tag you wish to add/remove to/from the tags list.",
           "content": {
             "application/json": {
               "schema": {
