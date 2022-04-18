@@ -65,7 +65,7 @@ describe('Tasks readFromBoard endpoint integration tests', () => {
   })
 
   describe('When an unexpected error occurs', () => {
-    it('Should 500 with message when an unexpected error occurs', async () => {
+    it('Should 500 with message', async () => {
       jest.spyOn(taskModel, 'find').mockResolvedValueOnce({
         sort: jest.fn().mockRejectedValueOnce(new Error('Unexpected error'))
       } as never)
