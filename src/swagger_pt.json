@@ -107,7 +107,7 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Lista todas as tarefas cadastradas no banco de dados de forma paginada e ordenada por boardId, status e priority.",
+        "summary": "Lista todas as tarefas cadastradas no banco de dados de forma paginada e ordenada por board, status e priority.",
         "operationId": "list all tasks",
         "parameters": [
           {
@@ -131,7 +131,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Objeto com informações da paginação e lista de tarefas de forma ordenada por boardId, status e priority, e paginada utilizando os parametros informados ou valores padrão.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
+            "description": "Objeto com informações da paginação e lista de tarefas de forma ordenada por board, status e priority, e paginada utilizando os parâmetros informados ou valores padrão.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
             "content": {
               "application/json": {
                 "schema": {

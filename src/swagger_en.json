@@ -107,7 +107,7 @@
         "tags": [
           "tasks"
         ],
-        "summary": "List all tasks registered in the database in a paginated way and sorted by boardId, status and priority.",
+        "summary": "List all tasks registered in the database in a paginated way and sorted by board, status and priority.",
         "operationId": "list all tasks",
         "parameters": [
           {
@@ -131,7 +131,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Object with pagination information and list of tasks sorted by boardId, status and priority, and paginated using the provided parameters or default values.<br>The properties \"previousPage\" and \"nextPage\" will only be present if the pages in question exist.",
+            "description": "Object with pagination information and list of tasks sorted by board, status and priority, and paginated using the provided parameters or default values.<br>The properties \"previousPage\" and \"nextPage\" will only be present if the pages in question exist.",
             "content": {
               "application/json": {
                 "schema": {
