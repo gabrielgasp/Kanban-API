@@ -15,9 +15,9 @@ app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // A
 
 app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
-const swaggerUiOptions = { customSiteTitle: 'Mamboo Kanban API Docs' }
-app.use('/docs/pt', swaggerUi.serveFiles(swaggerDocumentPt, swaggerUiOptions), swaggerUi.setup(swaggerDocumentPt)) // Apply swagger to route /docs/pt for interactive documentation in portuguese.
-app.use('/docs/en', swaggerUi.serveFiles(swaggerDocumentEn, swaggerUiOptions), swaggerUi.setup(swaggerDocumentEn)) // Apply swagger to route /docs/en for interactive documentation in english.
+const swaggerOptions = { customSiteTitle: 'Mamboo Kanban API Docs' }
+app.use('/docs/pt', swaggerUi.serveFiles(swaggerDocumentPt), swaggerUi.setup(swaggerDocumentPt, swaggerOptions)) // Apply swagger to route /docs/pt for interactive documentation in portuguese.
+app.use('/docs/en', swaggerUi.serveFiles(swaggerDocumentEn), swaggerUi.setup(swaggerDocumentEn, swaggerOptions)) // Apply swagger to route /docs/en for interactive documentation in english.
 
 app.get('/', (_req, res) => res.redirect('/docs/pt')) // Redirect from "/" to "/docs/pt"
 app.get('/docs', (_req, res) => res.redirect('/docs/pt')) // Redirect from "/docs" to "/docs/pt"
