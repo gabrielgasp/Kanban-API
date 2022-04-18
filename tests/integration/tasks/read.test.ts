@@ -214,5 +214,15 @@ describe('Tasks Read endpoint integration tests', () => {
         expect(body.docs).toHaveLength(3)
       })
     })
+
+    describe('When an unexpected error occurs', () => {
+      it('Should 500 with message when an unexpected error occurs', async () => {
+        jest.spyOn(taskModel, 'paginate').mockRejectedValueOnce(new Error('Unexpected error') as never)
+        const { status, body } = await fetchEndpoint(endpoint)
+  
+        expect(status).toBe(500)
+        expect(body.message).toBe('Something went wrong here, please try again later')
+      })
+    })
   })
 })

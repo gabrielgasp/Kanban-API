@@ -233,16 +233,24 @@ describe('Tasks Create endpoint integration tests', () => {
 
     it('Should 400 with message when a tags item is an empty string', async () => {
       const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, tags: [""] } })
-
+      
       expect(status).toBe(400)
       expect(body.message).toBe('"tags[0]" can not be an empty string')
     })
-
+    
     it('Should 400 with message when an unknown property is provided', async () => {
       const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: { ...newTask, unexpectedProperty: 'hello' } })
-
+      
       expect(status).toBe(400)
       expect(body.message).toBe('Unknown property: "unexpectedProperty"')
+    })
+
+    it('Should 500 with message when an unexpected error occurs', async () => {
+      jest.spyOn(taskModel, 'create').mockRejectedValueOnce(new Error('Unexpected error') as never)
+      const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: newTask })
+
+      expect(status).toBe(500)
+      expect(body.message).toBe('Something went wrong here, please try again later')
     })
   })
 })

@@ -68,5 +68,13 @@ describe('Tasks Delete endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('"id" must be a valid ObjectId' )
     })
+
+    it('Should 500 with message when an unexpected error occurs', async () => {
+      jest.spyOn(taskModel, 'findByIdAndDelete').mockRejectedValueOnce(new Error('Unexpected error') as never)
+      const { status, body } = await fetchEndpoint(`${endpoint}/000000000000000000000000`, { method: 'delete' })
+
+      expect(status).toBe(500)
+      expect(body.message).toBe('Something went wrong here, please try again later')
+    })
   })
 })

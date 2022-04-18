@@ -125,5 +125,13 @@ describe('Tasks updateMembers endpoint integration tests', () => {
       expect(status).toBe(400)
       expect(body.message).toBe('Unknown property: "unexpectedProperty"')
     })
+
+    it('Should 500 with message when an unexpected error occurs', async () => {
+      jest.spyOn(taskModel, 'findByIdAndUpdate').mockRejectedValueOnce(new Error('Unexpected error') as never)
+      const { status, body } = await fetchEndpoint(`${endpoint}/${fakeId}/members`, { method: 'patch',  body: { operation: 1, value: 'teste' } })
+
+      expect(status).toBe(500)
+      expect(body.message).toBe('Something went wrong here, please try again later')
+    })
   })
 })
