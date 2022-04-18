@@ -11,7 +11,7 @@ const taskSchema = new Schema<TaskDocument>({
   description: String,
   priority: { type: Number, required: true, min: 1, max: 5 },
   members: [String], // This type would probably be changed to ObjectId if we have a "users" collection
-  tags: [String] // This type would probably be changed to ObjectId if we have a "tags" collection
+  tags: [String]
 }, {
   timestamps: true,
   collection: 'tasks',
