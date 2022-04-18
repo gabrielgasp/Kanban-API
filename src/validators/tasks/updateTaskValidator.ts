@@ -31,7 +31,7 @@ export const updateTaskSchema = Joi.object({ // This is exported for testing pur
     'string.base': '400|{#label} must be a string',
     'string.empty': '400|{#label} can not be an empty string'
   }),
-  tags: Joi.array().items(Joi.string().trim()).messages({ // This type would probably be an array of ObjectIds if we have a "tags" collection
+  tags: Joi.array().items(Joi.string().trim()).messages({
     'array.base': '400|{#label} must be an array',
     'string.base': '400|{#label} must be a string',
     'string.empty': '400|{#label} can not be an empty string'
