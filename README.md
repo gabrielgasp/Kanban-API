@@ -22,7 +22,8 @@ A aplicação em produção utiliza um banco de dados `MongoDB Atlas` hospedado 
 
 A execução da aplicação de forma local poderá ser feita de duas formas: `Docker` ou `Node`.
 
-### Docker
+<details>
+  <summary><b>Docker</b></summary><br>
 
 ***Para rodar a API localmente utilizando Docker, certifique-se de ter o [Docker](https://docs.docker.com/get-docker/) e o [Docker-Compose](https://docs.docker.com/compose/install/) instalados em sua máquina.***
 
@@ -66,8 +67,10 @@ Obs: Docker e Docker-Compose utilizados no desenvolvimento e execução deste pr
 ```
 
 ***Caso a saída no seu terminal após o passo 4 seja um erro contendo a mensagem `Ports are not available`, abra o arquivo docker-compose.yml e siga as instruções para alterar a porta 3001 para outra que esteja disponível em sua máquina. Após realizar a alteração salve o arquivo e execute o passo 4 novamente.***
+</details>
 
-### Node
+<details>
+  <summary><b>Node</b></summary><br>
 
 ***Para rodar a API localmente utilizando Node, certifique-se de ter o [Node](https://nodejs.org/en/) instalado em sua máquina e um banco de dados [MongoDB](https://www.mongodb.com/) disponível para ser utilizado.***
 
@@ -119,6 +122,7 @@ Obs: Node e MongoDB utilizados no desenvolvimento e execução deste projeto est
 ```
 
 8. Para encerrar a aplicação basta pressionar `Ctrl + C` no terminal
+</details>
 
 ## Testes
 
@@ -126,8 +130,9 @@ Esta aplicação conta com `37 suítes de teste` com mais de `170 testes`, sendo
 
 ***Obs: No decorrer do desenvolvimento desta aplicação a entrega contínua (CD) foi interrompida devido uma brecha de segurança na integração entre as plataformas `Heroku` e `GitHub` (mais detalhes [aqui](https://status.heroku.com/incidents/2413)). O deploy da aplicação continuou sendo realizado através do Heroku CLI e a confiabilidade se manteve através dos `git hooks`.***
 
-### Rodando os testes
-
+  <details>
+  <summary><b>Rodando os testes</b></summary><br>
+    
 ***Para rodar os testes, certifique-se de ter o [Node](https://nodejs.org/en/) instalado em sua máquina. Não é necessário um banco de dados [MongoDB](https://www.mongodb.com/) disponível, os testes de integração são executados utilizando [MongoDB-Memory-Server](https://github.com/nodkz/mongodb-memory-server).***
 
 Obs: Node utilizado no desenvolvimento e execução dos testes deste projeto estava na versão `16.13.0`.
@@ -155,6 +160,7 @@ Obs: Node utilizado no desenvolvimento e execução dos testes deste projeto est
 ```bash
   npm test
 ```
+</details>
 
 ## Arquitetura
 
