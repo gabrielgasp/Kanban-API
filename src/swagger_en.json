@@ -1,0 +1,884 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Mamboo Kanban API",
+    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API.<br><br>Looking for the portuguese documentation? Try `/docs/pt`",
+    "contact": {
+      "email": "gabrielgaspar447@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "tags": [
+    {
+      "name": "tasks"
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Register a new task in the database.",
+        "operationId": "create task",
+        "requestBody": {
+          "description": "Task data.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NEW_TASK"
+              },
+              "example": {
+                "boardId": 1,
+                "status": "IN_PROGRESS",
+                "title": "Bake a cake",
+                "description": "I am hungry and I want to eat a cake",
+                "priority": 5,
+                "members": [
+                  "Gabriel",
+                  "Thayná"
+                ],
+                "tags": [
+                  "Food",
+                  "Cook"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Task successfully registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_REGISTRATION_RESPONSE"
+                },
+                "example": {
+                  "boardId": 1,
+                  "status": "IN_PROGRESS",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:14:22.579Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some data provided did not comply with the endpoint's rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "List all tasks registered in the database in a paginated way and sorted by boardId, status and priority.",
+        "operationId": "list all tasks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Defines the page that will be displayed. The first page will be displayed if this parameter is not provided.",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Defines the number of documents per page. 10 documents will be displayed per page if this parameter is not provided.<br>Keep in mind that changing the limit also affects the total number of pages.",
+            "schema": {
+              "type": "string",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with pagination information and list of tasks sorted by boardId, status and priority, and paginated using the provided parameters or default values.<br>The properties \"previousPage\" and \"nextPage\" will only be present if the pages in question exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASKS_LIST_PAGINATED_RESPONSE"
+                },
+                "example": {
+                  "totalDocs": 28,
+                  "docsPerPage": 10,
+                  "totalPages": 3,
+                  "currentPage": 2,
+                  "previousPage": 1,
+                  "nextPage": 3,
+                  "docs": [
+                    {
+                      "_id": "625c670e01ee4e6f9d2c125c",
+                      "boardId": 1,
+                      "status": "DONE",
+                      "title": "Bake a cake",
+                      "description": "I am hungry and I want to eat a cake",
+                      "priority": 5,
+                      "members": [
+                        "Gabriel",
+                        "Thayná"
+                      ],
+                      "tags": [
+                        "Food",
+                        "Cook"
+                      ],
+                      "createdAt": "2022-04-17T19:14:22.579Z",
+                      "updatedAt": "2022-04-17T19:27:11.237Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Updates the properties of a task registered in the database.",
+        "operationId": "update task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID of the task you wish to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "Properties that will be updated and their new values. It is not necessary to provide properties that will not be updated.<br><br>ATTENTION: When updating \"members\" and \"tags\" properties through this endpoint the arrays will be completely overwritten. If you just want to add or remove values, use the endpoints `/tasks/{taskId}/members` and `/tasks/{taskId}/tags` respectively.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UPDATE_TASK"
+              },
+              "example": {
+                "status": "DONE"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:27:11.237Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some data provided did not comply with the endpoint's rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "A task with the given id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Deletes a task registered in the database.",
+        "operationId": "delete task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID of the task you wish to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:27:11.237Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "A task with the given id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/board/{boardId}": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "List all tasks on the requested board sorted by status and priority.",
+        "operationId": "list all tasks from board",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "boardId",
+            "description": "ID of the board you would like to query for tasks.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List with all tasks of the requested board sorted by status and priority.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASKS_LIST_RESPONSE"
+                },
+                "example": [
+                  {
+                    "_id": "625c670e01ee4e6f9d2c125c",
+                    "boardId": 1,
+                    "status": "DONE",
+                    "title": "Bake a cake",
+                    "description": "I am hungry and I want to eat a cake",
+                    "priority": 5,
+                    "members": [
+                      "Gabriel",
+                      "Thayná"
+                    ],
+                    "tags": [
+                      "Food",
+                      "Cook"
+                    ],
+                    "createdAt": "2022-04-17T19:14:22.579Z",
+                    "updatedAt": "2022-04-17T19:27:11.237Z"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "No tasks were found for the given boardId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No tasks were found for the boardId provided, please make sure that the board exist and have tasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}/members": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Add or remove a member from a task's member list.",
+        "operationId": "update task members",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID of the task you wish to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "Provide the type of operation (1 to add or -1 to remove) and the member you wish to add/remove to/from the members list.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UPDATE_LIST"
+              },
+              "example": {
+                "operation": -1,
+                "value": "Gabriel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:31:43.721Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some data provided did not comply with the endpoint's rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
+                },
+                "example": {
+                  "message": "Here will be described what is wrong. Ex. \"value\" must be a string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "A task with the given id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}/tags": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Add or remove a tag from a task's tag list.",
+        "operationId": "update task tags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID of the task you wish to update.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "Provide the type of operation (1 to add or -1 to remove) and the tag you wish to add/remove to/from the tags list.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UPDATE_LIST"
+              },
+              "example": {
+                "operation": -1,
+                "value": "Gabriel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook",
+                    "Cake"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:33:21.512Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some data provided did not comply with the endpoint's rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
+                },
+                "example": {
+                  "message": "Here will be described what is wrong. Ex. \"value\" must be a string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "A task with the given id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NEW_TASK": {
+        "required": [
+          "boardId",
+          "status",
+          "title",
+          "priority"
+        ],
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "boardId": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/UPDATE_TASK"
+          }
+        ]
+      },
+      "TASK_REGISTRATION_RESPONSE": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "TASKS_LIST_RESPONSE": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "boardId": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "priority": {
+              "type": "integer"
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TASKS_LIST_PAGINATED_RESPONSE": {
+        "type": "object",
+        "required": [
+          "totalDocs",
+          "docsPerPage",
+          "totalPages",
+          "currentPage",
+          "data"
+        ],
+        "properties": {
+          "totalDocs": {
+            "type": "integer"
+          },
+          "docsPerPage": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "currentPage": {
+            "type": "integer"
+          },
+          "previousPage": {
+            "type": "integer"
+          },
+          "nextPage": {
+            "type": "integer"
+          },
+          "docs": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TASKS_LIST_RESPONSE"
+              }
+            ]
+          }
+        }
+      },
+      "UPDATE_TASK": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TASK_UPDATE_RESPONSE": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "boardId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "UPDATE_LIST": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "TASK_NOT_FOUND_ERROR": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Task not found"
+          }
+        }
+      },
+      "VALIDATION_ERROR": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Here will be described what is wrong. Ex. \"title\" must be a string"
+          }
+        }
+      },
+      "INTERNAL_ERROR": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Something went wrong here, please try again later"
+          }
+        }
+      }
+    }
+  }
+}

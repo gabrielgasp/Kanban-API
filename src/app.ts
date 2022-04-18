@@ -2,7 +2,8 @@ import 'dotenv/config'
 import express, { Express } from 'express'
 import 'express-async-errors' // This is a lib that will automatically catch all async errors and send them to the error handler
 import swaggerUi from 'swagger-ui-express'
-import swaggerDocument from './swagger.json'
+import swaggerDocumentPt from './swagger_pt.json'
+import swaggerDocumentEn from './swagger_en.json'
 import { errorHandler } from './middlewares'
 import { routersFactory } from './Factory'
 
@@ -14,8 +15,9 @@ app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // A
 
 app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
 
-const swaggerUiOptions = { customSiteTitle: 'Mamboo Kanban API Documentation' }
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions)) // Apply swagger to route /docs for interactive documentation.
+const swaggerUiOptions = { customSiteTitle: 'Mamboo Kanban API Docs' }
+app.use('/docs/pt', swaggerUi.serve, swaggerUi.setup(swaggerDocumentPt, swaggerUiOptions)) // Apply swagger to route /docs/pt for interactive documentation.
+app.use('/docs/en', swaggerUi.serve, swaggerUi.setup(swaggerDocumentEn, swaggerUiOptions)) // Apply swagger to route /docs/en for interactive documentation.
 
 app.get('/', (_req, res) => res.redirect('/docs')) // Redirect from "/" to "/tasks"
 
