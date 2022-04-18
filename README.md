@@ -182,6 +182,7 @@ Obs: Node utilizado no desenvolvimento e execução dos testes deste projeto est
 
 ### Paradigmas
 
+- Arquitetura em Camadas
 - TDD
 - REST
 - OOP
