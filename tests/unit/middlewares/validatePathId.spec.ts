@@ -39,7 +39,7 @@ describe('validatePathId middleware unit test', () => {
       validatePathId(mockReq, mockRes, mockNext)
 
       expect(mockRes.status).toHaveBeenCalledWith(400)
-      expect(mockRes.json).toHaveBeenCalledWith({ message: 'ID must be a valid ObjectId' })
+      expect(mockRes.json).toHaveBeenCalledWith({ message: '"id" must be a valid ObjectId' })
     })
   })
 })

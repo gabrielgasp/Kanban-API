@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Mamboo Kanban API",
-    "description": "Essa API foi desenvolvida como teste técnico do processo seletivo para a vaga de desenvolvedor backend pleno da empresa Mamboo.<br><br>Abaixo você irá encontrar toda a documentação referente ao funcionamento e utilização da API em questão.",
+    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API.<br><br>Procurando a documentação em português? Tente `/docs/pt` 😉.",
     "contact": {
       "email": "gabrielgaspar447@gmail.com"
     },
@@ -10,13 +10,12 @@
   },
   "servers": [
     {
-      "url": "https://mamboo-kanban-api.herokuapp.com"
+      "url": "http://localhost:3001"
     }
   ],
   "tags": [
     {
-      "name": "tasks",
-      "description": "CRUD de tarefas de uma aplicação de quadro kanban."
+      "name": "tasks"
     }
   ],
   "paths": {
@@ -25,14 +24,14 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Realiza o cadastro de uma nova tarefa no banco de dados.",
+        "summary": "Register a new task in the database.",
         "operationId": "create task",
         "requestBody": {
-          "description": "Dados da tarefa.",
+          "description": "Task data.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NOVA_TAREFA"
+                "$ref": "#/components/schemas/NEW_TASK"
               },
               "example": {
                 "boardId": 1,
@@ -55,11 +54,11 @@
         },
         "responses": {
           "201": {
-            "description": "Tarefa cadastrada com sucesso.",
+            "description": "Task successfully registered.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_CADASTRO_TAREFA"
+                  "$ref": "#/components/schemas/TASK_REGISTRATION_RESPONSE"
                 },
                 "example": {
                   "boardId": 1,
@@ -83,21 +82,21 @@
             }
           },
           "400": {
-            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "description": "Some data provided did not comply with the endpoint's rules",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
                 }
               }
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -108,13 +107,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Lista todas as tarefas cadastradas no banco de dados de forma paginada e ordenada por boardId, status e priority.",
+        "summary": "List all tasks registered in the database in a paginated way and sorted by boardId, status and priority.",
         "operationId": "list all tasks",
         "parameters": [
           {
             "in": "query",
             "name": "page",
-            "description": "Define a pagina que será exibida. Caso não seja informado será exibido a primeira pagina.",
+            "description": "Defines the page that will be displayed. The first page will be displayed if this parameter is not provided.",
             "schema": {
               "type": "integer",
               "example": 1
@@ -123,20 +122,20 @@
           {
             "in": "query",
             "name": "limit",
-            "description": "Define a quantidade de documentos por pagina. Caso não seja informado será usado o valor 10 como padrão.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
+            "description": "Defines the number of documents per page. 10 documents will be displayed per page if this parameter is not provided.<br>Keep in mind that changing the limit also affects the total number of pages.",
             "schema": {
-              "type": "string",
+              "type": "integer",
               "example": 10
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Objeto com informações da paginação e lista com todas as tarefas de forma ordenada por boardId, status e priority e paginada utilizando os parametros informados ou valores padrão na ausência destes.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
+            "description": "Object with pagination information and list of tasks sorted by boardId, status and priority, and paginated using the provided parameters or default values.<br>The properties \"previousPage\" and \"nextPage\" will only be present if the pages in question exist.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS_PAGINADA"
+                  "$ref": "#/components/schemas/TASKS_LIST_PAGINATED_RESPONSE"
                 },
                 "example": {
                   "totalDocs": 28,
@@ -170,11 +169,11 @@
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -187,13 +186,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Atualiza as propriedades de uma tarefa cadastrada no banco de dados.",
+        "summary": "Updates the properties of a task registered in the database.",
         "operationId": "update task",
         "parameters": [
           {
             "in": "path",
             "name": "taskId",
-            "description": "ID da tarefa que gostaria de atualizar.",
+            "description": "ID of the task you wish to update.",
             "required": true,
             "schema": {
               "type": "string"
@@ -202,11 +201,11 @@
           }
         ],
         "requestBody": {
-          "description": "No body deverão ser informadas as propriedades que serão atualizadas e seus novos valores. Não é necessário informar propriedades que não serão atualizadas.<br>ATENÇÃO: Ao atualizar as propriedades \"members\" e \"tags\" através deste endpoint os arrays serão completamente sobreescritos. Caso queira apenas adicionar ou remover valores, utilize os endpoints \"/tasks/{taskId}/members\" e \"/tasks/{taskId}/tags\" respectivamente.",
+          "description": "Properties that will be updated and their new values. It is not necessary to provide properties that will not be updated.<br><br>ATTENTION: When updating \"members\" and \"tags\" properties through this endpoint the arrays will be completely overwritten. If you just want to add or remove values, use the endpoints `/tasks/{taskId}/members` and `/tasks/{taskId}/tags` respectively.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ATUALIZAR_TAREFA"
+                "$ref": "#/components/schemas/UPDATE_TASK"
               },
               "example": {
                 "status": "DONE"
@@ -217,11 +216,11 @@
         },
         "responses": {
           "200": {
-            "description": "Tarefa atualizada com sucesso.",
+            "description": "Task updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
                 },
                 "example": {
                   "_id": "625c670e01ee4e6f9d2c125c",
@@ -245,31 +244,31 @@
             }
           },
           "400": {
-            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "description": "Some data provided did not comply with the endpoint's rules",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
                 }
               }
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "A task with the given id was not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
                 }
               }
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -280,13 +279,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Deleta uma tarefa cadastrada no banco de dados.",
+        "summary": "Deletes a task registered in the database.",
         "operationId": "delete task",
         "parameters": [
           {
             "in": "path",
             "name": "taskId",
-            "description": "ID da tarefa que gostaria de atualizar.",
+            "description": "ID of the task you wish to delete.",
             "required": true,
             "schema": {
               "type": "string"
@@ -296,11 +295,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Tarefa deletada com sucesso.",
+            "description": "Task deleted successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
                 },
                 "example": {
                   "_id": "625c670e01ee4e6f9d2c125c",
@@ -324,21 +323,21 @@
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "A task with the given id was not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
                 }
               }
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -351,13 +350,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Lista todas as tarefas do quadro informado de forma ordenada por status e priority.",
+        "summary": "List all tasks on the requested board sorted by status and priority.",
         "operationId": "list all tasks from board",
         "parameters": [
           {
             "in": "path",
             "name": "boardId",
-            "description": "ID do quadro que gostaria de consultar as tarefas.",
+            "description": "ID of the board you would like to query for tasks.",
             "required": true,
             "schema": {
               "type": "integer"
@@ -367,11 +366,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista com todas as tarefas do quadro informado ordenadas por status e priority",
+            "description": "List with all tasks of the requested board sorted by status and priority.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS"
+                  "$ref": "#/components/schemas/TASKS_LIST_RESPONSE"
                 },
                 "example": [
                   {
@@ -396,12 +395,28 @@
               }
             }
           },
-          "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+          "404": {
+            "description": "No tasks were found for the given boardId",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No tasks were found for the boardId provided, please make sure that the board exist and have tasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error, please try again later or contact the developer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -414,13 +429,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Adiciona ou remove um item da lista de membros de uma tarefa.",
+        "summary": "Add or remove a member from a task's member list.",
         "operationId": "update task members",
         "parameters": [
           {
             "in": "path",
             "name": "taskId",
-            "description": "ID da tarefa que gostaria de atualizar.",
+            "description": "ID of the task you wish to update.",
             "required": true,
             "schema": {
               "type": "string"
@@ -429,11 +444,11 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar e -1 para remover) e o valor que gostaria de adicionar/remover da lista de membros.",
+          "description": "Provide the type of operation (`1` to add or `-1` to remove) and the member you wish to add/remove to/from the members list.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ATUALIZAR_LISTA"
+                "$ref": "#/components/schemas/UPDATE_LIST"
               },
               "example": {
                 "operation": -1,
@@ -445,11 +460,11 @@
         },
         "responses": {
           "200": {
-            "description": "Tarefa atualizada com sucesso.",
+            "description": "Task updated successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
                 },
                 "example": {
                   "_id": "625c670e01ee4e6f9d2c125c",
@@ -472,34 +487,34 @@
             }
           },
           "400": {
-            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "description": "Some data provided did not comply with the endpoint's rules",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
                 },
                 "example": {
-                  "message": "Aqui estará descrito o que está errado. Ex. \"value\" must be a string"
+                  "message": "Here will be described what is wrong. Ex. \"value\" must be a string"
                 }
               }
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "A task with the given id was not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
                 }
               }
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -512,13 +527,13 @@
         "tags": [
           "tasks"
         ],
-        "summary": "Adiciona ou remove um item da lista de tags de uma tarefa.",
+        "summary": "Add or remove a tag from a task's tag list.",
         "operationId": "update task tags",
         "parameters": [
           {
             "in": "path",
             "name": "taskId",
-            "description": "ID da tarefa que gostaria de atualizar.",
+            "description": "ID of the task you wish to update.",
             "required": true,
             "schema": {
               "type": "string"
@@ -527,15 +542,15 @@
           }
         ],
         "requestBody": {
-          "description": "Informe o tipo de operação (1 para adicionar e -1 para remover) e o valor que gostaria de adicionar/remover da lista de tags.",
+          "description": "Provide the type of operation (`1` to add or `-1` to remove) and the tag you wish to add/remove to/from the tags list.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ATUALIZAR_LISTA"
+                "$ref": "#/components/schemas/UPDATE_LIST"
               },
               "example": {
-                "operation": 1,
-                "value": "Cake"
+                "operation": -1,
+                "value": "Gabriel"
               }
             }
           },
@@ -547,7 +562,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                  "$ref": "#/components/schemas/TASK_UPDATE_RESPONSE"
                 },
                 "example": {
                   "_id": "625c670e01ee4e6f9d2c125c",
@@ -571,34 +586,34 @@
             }
           },
           "400": {
-            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "description": "Some data provided did not comply with the endpoint's rules",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                  "$ref": "#/components/schemas/VALIDATION_ERROR"
                 },
                 "example": {
-                  "message": "Aqui estará descrito o que está errado. Ex. \"value\" must be a string"
+                  "message": "Here will be described what is wrong. Ex. \"value\" must be a string"
                 }
               }
             }
           },
           "404": {
-            "description": "Não foi encontrado uma tarefa com o id informado",
+            "description": "A task with the given id was not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                  "$ref": "#/components/schemas/TASK_NOT_FOUND_ERROR"
                 }
               }
             }
           },
           "500": {
-            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "description": "Internal error, please try again later or contact the developer.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                  "$ref": "#/components/schemas/INTERNAL_ERROR"
                 }
               }
             }
@@ -609,7 +624,7 @@
   },
   "components": {
     "schemas": {
-      "NOVA_TAREFA": {
+      "NEW_TASK": {
         "required": [
           "boardId",
           "status",
@@ -626,11 +641,11 @@
             }
           },
           {
-            "$ref": "#/components/schemas/ATUALIZAR_TAREFA"
+            "$ref": "#/components/schemas/UPDATE_TASK"
           }
         ]
       },
-      "RESPOSTA_CADASTRO_TAREFA": {
+      "TASK_REGISTRATION_RESPONSE": {
         "type": "object",
         "properties": {
           "boardId": {
@@ -671,7 +686,7 @@
           }
         }
       },
-      "RESPOSTA_LISTA_TAREFAS": {
+      "TASKS_LIST_RESPONSE": {
         "type": "array",
         "items": {
           "type": "object",
@@ -715,7 +730,7 @@
           }
         }
       },
-      "RESPOSTA_LISTA_TAREFAS_PAGINADA": {
+      "TASKS_LIST_PAGINATED_RESPONSE": {
         "type": "object",
         "required": [
           "totalDocs",
@@ -746,13 +761,13 @@
           "docs": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS"
+                "$ref": "#/components/schemas/TASKS_LIST_RESPONSE"
               }
             ]
           }
         }
       },
-      "ATUALIZAR_TAREFA": {
+      "UPDATE_TASK": {
         "type": "object",
         "properties": {
           "status": {
@@ -781,7 +796,7 @@
           }
         }
       },
-      "RESPOSTA_ATUALIZACAO_TAREFA": {
+      "TASK_UPDATE_RESPONSE": {
         "type": "object",
         "properties": {
           "_id": {
@@ -822,7 +837,7 @@
           }
         }
       },
-      "ATUALIZAR_LISTA": {
+      "UPDATE_LIST": {
         "type": "object",
         "properties": {
           "operation": {
@@ -837,7 +852,7 @@
           }
         }
       },
-      "ERRO_TAREFA_NAO_ENCONTRADO": {
+      "TASK_NOT_FOUND_ERROR": {
         "type": "object",
         "properties": {
           "message": {
@@ -846,16 +861,16 @@
           }
         }
       },
-      "ERRO_VALIDACAO": {
+      "VALIDATION_ERROR": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "example": "Aqui estará descrito o que está errado. Ex. \"title\" must be a string"
+            "example": "Here will be described what is wrong. Ex. \"title\" must be a string"
           }
         }
       },
-      "ERRO_INTERNO": {
+      "INTERNAL_ERROR": {
         "type": "object",
         "properties": {
           "message": {

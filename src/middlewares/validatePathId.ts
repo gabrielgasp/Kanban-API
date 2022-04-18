@@ -4,7 +4,7 @@ import { isValidObjectId } from 'mongoose' // If this method is used anywhere el
 export const validatePathId = (req: Request, res: Response, next: NextFunction): Response | void => {
   if (!isValidObjectId(req.params.id)) { // Verify if the id is a valid MongoDB ObjectId
     return res.status(400)
-      .json({ message: 'ID must be a valid ObjectId' })
+      .json({ message: '"id" must be a valid ObjectId' })
   }
   return next()
 }

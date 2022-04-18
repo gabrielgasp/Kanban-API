@@ -1,0 +1,884 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Mamboo Kanban API",
+    "description": "Este projeto foi desenvolvido como teste técnico do processo seletivo para a vaga de desenvolvedor backend da empresa Mamboo.<br><br>Esta API é um CRUD de tarefas de uma aplicação de quadro kanban.<br><br>Abaixo você irá encontrar toda a documentação referente ao funcionamento e utilização da API.<br><br>Looking for the english documentation? Try `/docs/en` 😉.",
+    "contact": {
+      "email": "gabrielgaspar447@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://mamboo-kanban-api.herokuapp.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "tasks"
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Realiza o cadastro de uma nova tarefa no banco de dados.",
+        "operationId": "create task",
+        "requestBody": {
+          "description": "Dados da tarefa.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NOVA_TAREFA"
+              },
+              "example": {
+                "boardId": 1,
+                "status": "IN_PROGRESS",
+                "title": "Bake a cake",
+                "description": "I am hungry and I want to eat a cake",
+                "priority": 5,
+                "members": [
+                  "Gabriel",
+                  "Thayná"
+                ],
+                "tags": [
+                  "Food",
+                  "Cook"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Tarefa cadastrada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_CADASTRO_TAREFA"
+                },
+                "example": {
+                  "boardId": 1,
+                  "status": "IN_PROGRESS",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:14:22.579Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Lista todas as tarefas cadastradas no banco de dados de forma paginada e ordenada por boardId, status e priority.",
+        "operationId": "list all tasks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Define a pagina que será exibida. A primeira página será exibida caso não seja informada.",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Define a quantidade de documentos por pagina. Serão exibidos 10 documentos por página caso não seja informado.<br>Tenha em mente que alterar o limit também afeta o número total de paginas disponíveis.",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objeto com informações da paginação e lista de tarefas de forma ordenada por boardId, status e priority, e paginada utilizando os parametros informados ou valores padrão.<br> As propriedades \"previousPage\" e \"nextPage\" só estarão presentes caso as paginas em questão existam.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS_PAGINADA"
+                },
+                "example": {
+                  "totalDocs": 28,
+                  "docsPerPage": 10,
+                  "totalPages": 3,
+                  "currentPage": 2,
+                  "previousPage": 1,
+                  "nextPage": 3,
+                  "docs": [
+                    {
+                      "_id": "625c670e01ee4e6f9d2c125c",
+                      "boardId": 1,
+                      "status": "DONE",
+                      "title": "Bake a cake",
+                      "description": "I am hungry and I want to eat a cake",
+                      "priority": 5,
+                      "members": [
+                        "Gabriel",
+                        "Thayná"
+                      ],
+                      "tags": [
+                        "Food",
+                        "Cook"
+                      ],
+                      "createdAt": "2022-04-17T19:14:22.579Z",
+                      "updatedAt": "2022-04-17T19:27:11.237Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Atualiza as propriedades de uma tarefa cadastrada no banco de dados.",
+        "operationId": "update task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID da tarefa que gostaria de atualizar.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "No body deverão ser informadas as propriedades que serão atualizadas e seus novos valores. Não é necessário informar propriedades que não serão atualizadas.<br><br>ATENÇÃO: Ao atualizar as propriedades \"members\" e \"tags\" através deste endpoint os arrays serão completamente sobreescritos. Caso queira apenas adicionar ou remover valores, utilize os endpoints `/tasks/{taskId}/members` e `/tasks/{taskId}/tags` respectivamente.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ATUALIZAR_TAREFA"
+              },
+              "example": {
+                "status": "DONE"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:27:11.237Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não foi encontrada uma tarefa com o id informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Deleta uma tarefa cadastrada no banco de dados.",
+        "operationId": "delete task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID da tarefa que gostaria de deletar.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefa deletada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Gabriel",
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:27:11.237Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não foi encontrada uma tarefa com o id informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/board/{boardId}": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Lista todas as tarefas do quadro informado de forma ordenada por status e priority.",
+        "operationId": "list all tasks from board",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "boardId",
+            "description": "ID do quadro que gostaria de consultar as tarefas.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista com todas as tarefas do quadro informado ordenadas por status e priority",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS"
+                },
+                "example": [
+                  {
+                    "_id": "625c670e01ee4e6f9d2c125c",
+                    "boardId": 1,
+                    "status": "DONE",
+                    "title": "Bake a cake",
+                    "description": "I am hungry and I want to eat a cake",
+                    "priority": 5,
+                    "members": [
+                      "Gabriel",
+                      "Thayná"
+                    ],
+                    "tags": [
+                      "Food",
+                      "Cook"
+                    ],
+                    "createdAt": "2022-04-17T19:14:22.579Z",
+                    "updatedAt": "2022-04-17T19:27:11.237Z"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Não foi encontrada nenhuma tarefa para o boardId informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No tasks were found for the boardId provided, please make sure that the board exist and have tasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}/members": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Adiciona ou remove um membro da lista de membros de uma tarefa.",
+        "operationId": "update task members",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID da tarefa que gostaria de atualizar.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "Informe o tipo de operação (`1` para adicionar ou `-1` para remover) e o membro que gostaria de adicionar/remover da lista de membros.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ATUALIZAR_LISTA"
+              },
+              "example": {
+                "operation": -1,
+                "value": "Gabriel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:31:43.721Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                },
+                "example": {
+                  "message": "Aqui estará descrito o que está errado. Ex. \"value\" must be a string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não foi encontrada uma tarefa com o id informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}/tags": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Adiciona ou remove uma tag da lista de tags de uma tarefa.",
+        "operationId": "update task tags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "description": "ID da tarefa que gostaria de atualizar.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "625c670e01ee4e6f9d2c125c"
+          }
+        ],
+        "requestBody": {
+          "description": "Informe o tipo de operação (`1` para adicionar ou `-1` para remover) e a tag que gostaria de adicionar/remover da lista de tags.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ATUALIZAR_LISTA"
+              },
+              "example": {
+                "operation": 1,
+                "value": "Cake"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESPOSTA_ATUALIZACAO_TAREFA"
+                },
+                "example": {
+                  "_id": "625c670e01ee4e6f9d2c125c",
+                  "boardId": 1,
+                  "status": "DONE",
+                  "title": "Bake a cake",
+                  "description": "I am hungry and I want to eat a cake",
+                  "priority": 5,
+                  "members": [
+                    "Thayná"
+                  ],
+                  "tags": [
+                    "Food",
+                    "Cook",
+                    "Cake"
+                  ],
+                  "createdAt": "2022-04-17T19:14:22.579Z",
+                  "updatedAt": "2022-04-17T19:33:21.512Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Algum dado informado não está de acordo com as regras do endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_VALIDACAO"
+                },
+                "example": {
+                  "message": "Aqui estará descrito o que está errado. Ex. \"value\" must be a string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não foi encontrada uma tarefa com o id informado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_TAREFA_NAO_ENCONTRADO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno, por favor tente novamente mais tarde ou contate o desenvolvedor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ERRO_INTERNO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NOVA_TAREFA": {
+        "required": [
+          "boardId",
+          "status",
+          "title",
+          "priority"
+        ],
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "boardId": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/ATUALIZAR_TAREFA"
+          }
+        ]
+      },
+      "RESPOSTA_CADASTRO_TAREFA": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "RESPOSTA_LISTA_TAREFAS": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "boardId": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "priority": {
+              "type": "integer"
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RESPOSTA_LISTA_TAREFAS_PAGINADA": {
+        "type": "object",
+        "required": [
+          "totalDocs",
+          "docsPerPage",
+          "totalPages",
+          "currentPage",
+          "data"
+        ],
+        "properties": {
+          "totalDocs": {
+            "type": "integer"
+          },
+          "docsPerPage": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "currentPage": {
+            "type": "integer"
+          },
+          "previousPage": {
+            "type": "integer"
+          },
+          "nextPage": {
+            "type": "integer"
+          },
+          "docs": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RESPOSTA_LISTA_TAREFAS"
+              }
+            ]
+          }
+        }
+      },
+      "ATUALIZAR_TAREFA": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RESPOSTA_ATUALIZACAO_TAREFA": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "boardId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "ATUALIZAR_LISTA": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ERRO_TAREFA_NAO_ENCONTRADO": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Task not found"
+          }
+        }
+      },
+      "ERRO_VALIDACAO": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Aqui estará descrito o que está errado. Ex. \"title\" must be a string"
+          }
+        }
+      },
+      "ERRO_INTERNO": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Something went wrong here, please try again later"
+          }
+        }
+      }
+    }
+  }
+}
