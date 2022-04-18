@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Mamboo Kanban API",
-    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API.<br><br>Procurando a documentação em português? Tente `/docs/pt` 😉.",
+    "description": "This project was developed as a technical test of the selection process for a backend developer position at Mamboo.<br><br>This API is a CRUD of tasks for a kanban board application.<br><br>Below you will find all the documentation regarding the operation and use of the API, and you can also make requests to the listed endpoints through the page's graphical interface.<br><br>Procurando a documentação em português? Tente `/docs/pt` 😉.",
     "contact": {
       "email": "gabrielgaspar447@gmail.com"
     },

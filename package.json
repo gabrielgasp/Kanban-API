@@ -13,7 +13,9 @@
     "lint": "eslint src/** --ext .ts --fix --no-error-on-unmatched-pattern",
     "dev": "tsnd --respawn --transpile-only --cls --exit-child src/server.ts",
     "build": "tsc --build tsconfig.build.json",
-    "start": "node ."
+    "start": "node .",
+    "compose:up": "docker-compose up --build -d",
+    "compose:down": "docker-compose down --rmi local --volumes --remove-orphans"
   },
   "repository": {
     "type": "git",

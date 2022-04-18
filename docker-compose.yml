@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: mk-api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3001" # <--- Caso queira usar uma porta diferente, altere o número da esquerda.
+    environment:
+      - MONGO_URI=mongodb://db/mamboo-kanban-api
+
+  db:
+    image: mongo
+    container_name: mk-db
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo --quiet | grep 1
+      timeout: 5s
+      retries: 5
+      start_period: 5s
