@@ -177,6 +177,7 @@ Obs: Node utilizado no desenvolvimento e execução dos testes deste projeto est
 ### Paradigmas
 
 - TDD
+- REST
 - OOP
 - SOLID
 - CI/CD
