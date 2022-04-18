@@ -20,7 +20,7 @@ A aplicação em produção utiliza um banco de dados `MongoDB Atlas` hospedado 
 
 ## Rodando localmente
 
-A execução da aplicação de forma local poderá ser feita de duas formas: `Docker` ou `Node`.
+A execução da aplicação de forma local pode ser realizada de duas formas: `Docker` ou `Node`.
 
 <details>
   <summary><b>Docker</b></summary><br>
