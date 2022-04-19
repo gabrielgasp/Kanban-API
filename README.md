@@ -8,7 +8,7 @@ Abaixo você encontrará instruções sobre como consultar a documentação da A
 
 ## Documentação da API
 
-A documentação de operação da API foi feita utilizando [Swagger](https://swagger.io/) e seguindo a [OAS3 (OpenAPI Specification 3.0)](https://swagger.io/specification/), e pode ser consultada de forma interativa através dos endpoints `/docs/pt` e `/docs/en` em portugues e inglês respectivamente.
+A documentação de operação da API foi feita utilizando [Swagger](https://swagger.io/) e seguindo a [OAS3 (OpenAPI Specification 3.0)](https://swagger.io/specification/), e pode ser consultada de forma interativa através dos endpoints `/docs/pt` e `/docs/en` em português e inglês respectivamente.
 
 Além de explicar e exemplificar a utilização da API, as páginas ainda permitem testar os endpoints diretamente pela interface gráfica da documentação.
 
