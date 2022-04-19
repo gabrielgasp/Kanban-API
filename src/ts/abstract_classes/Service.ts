@@ -1,4 +1,4 @@
-import { IService, IRepository, serviceReadResponse } from '../interfaces'
+import { IService, IRepository, IServiceReadResponse } from '../interfaces'
 
 // Service is where we put all our business logic.
 // It can be considered a middle-ground where we don't have to worry about
@@ -12,7 +12,7 @@ export abstract class AbstractService<T> implements IService<T> {
     return await this.repository.create(data)
   }
 
-  public async read (page: string = '1', limit: string = '10'): Promise<serviceReadResponse<T>> {
+  public async read (page: string = '1', limit: string = '10'): Promise<IServiceReadResponse<T>> {
     // Here we are defining the requested page as number after doing some checks to make sure we always have a valid page value.
     let pageNumber = parseInt(page) > 0 ? parseInt(page) : 1
 
