@@ -4,7 +4,7 @@ Esta aplicação foi desenvolvida como teste técnico do processo seletivo para 
 
 Trata-se de uma API de tarefas de uma aplicação de quadro Kanban com 7 endpoints onde é possível realizar operações CRUD em um banco de dados MongoDB.
 
-Abaixo você encontrará instruções sobre como consultar a documentação da API, como acessar a aplicação, testes da aplicação, tecnologias utilizadas e um diagrama da arquitetura implementada.
+Abaixo você encontra instruções sobre como consultar a documentação da API, como acessar a aplicação, testes da aplicação, tecnologias utilizadas e um diagrama da arquitetura implementada.
 
 ## Documentação da API
 
@@ -14,7 +14,7 @@ Além de explicar e exemplificar a utilização da API, as páginas ainda permit
 
 ## Acessando a aplicação em produção
 
-A aplicação poderá ser acessada através de seu deploy na plataforma `Heroku`. Para isso basta clicar [aqui](https://mamboo-kanban-api.herokuapp.com/docs/pt/).
+A aplicação pode ser acessada através de seu deploy na plataforma `Heroku`. Para isso basta clicar [aqui](https://mamboo-kanban-api.herokuapp.com/docs/pt/).
 
 A aplicação em produção utiliza um banco de dados `MongoDB Atlas` hospedado pela AWS em São Paulo.
 
