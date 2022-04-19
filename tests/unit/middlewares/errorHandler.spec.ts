@@ -9,7 +9,7 @@ describe('errorHandler middleware unit tests', () => {
   beforeEach(() => {
     mockRes.status = jest.fn().mockReturnValue(mockRes) // Just like the original res.status, this will return the response object
     mockRes.json = jest.fn()
-    jest.spyOn(console, 'error').mockImplementation(() => {}) // We mock the console.error method so that we can test without printing the error to the console
+    jest.spyOn(console, 'error').mockImplementation(() => null) // We mock the console.error method so that we can test without printing the error to the console
   })
 
   describe('When receive an unexpected error', () => {

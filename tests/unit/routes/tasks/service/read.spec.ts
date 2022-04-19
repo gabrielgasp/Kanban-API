@@ -121,7 +121,7 @@ describe("TasksService read method unit tests", () => {
       mockTasksRepository.countDocuments.mockResolvedValueOnce(9)
       mockTasksRepository.read.mockResolvedValueOnce(fakeRepositoryResponse)
 
-      const result = await tasksService.read('3', '5')
+      await tasksService.read('3', '5')
 
       expect(mockTasksRepository.read).toHaveBeenCalledWith(2, 5)
     })

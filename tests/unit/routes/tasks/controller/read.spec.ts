@@ -57,7 +57,7 @@ describe("TasksController read method unit tests", () => {
   })
 
   it("should call res.status with 200 and res.json with the result of service's read method", async () => {
-    const result = await tasksController.read(mockReq, mockRes)
+    await tasksController.read(mockReq, mockRes)
 
     expect(mockRes.status).toHaveBeenCalledWith(200)
     expect(mockRes.json).toHaveBeenCalledWith(fakeTaskResponse)

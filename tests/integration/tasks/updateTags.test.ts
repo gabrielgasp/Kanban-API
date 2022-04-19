@@ -48,7 +48,7 @@ describe('Tasks updateTags endpoint integration tests', () => {
     it('Should have updated tags in the database collection', async () => {
       const taskInDatabase = await taskModel.findById(taskId)
 
-      expect(taskInDatabase!.tags).toEqual(['teste'])
+      expect(taskInDatabase?.tags).toEqual(['teste'])
     })
   })
 
@@ -66,7 +66,7 @@ describe('Tasks updateTags endpoint integration tests', () => {
     it('Should have updated tags in the database collection', async () => {
       const taskInDatabase = await taskModel.findById(taskId)
 
-      expect(taskInDatabase!.tags).toEqual([])
+      expect(taskInDatabase?.tags).toEqual([])
     })
   })
 

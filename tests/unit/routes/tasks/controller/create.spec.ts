@@ -38,7 +38,7 @@ describe("TasksController create method unit tests", () => {
   })
 
   it("should call res.status with 201 and res.json with the result of service's create method", async () => {
-    const result = await tasksController.create(mockReq, mockRes)
+    await tasksController.create(mockReq, mockRes)
 
     expect(mockRes.status).toHaveBeenCalledWith(201)
     expect(mockRes.json).toHaveBeenCalledWith({ ...fakeTask, _id: 'test' })

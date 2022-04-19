@@ -48,7 +48,7 @@ describe('Tasks updateMembers endpoint integration tests', () => {
     it('Should have updated members in the database collection', async () => {
       const taskInDatabase = await taskModel.findById(taskId)
 
-      expect(taskInDatabase!.members).toEqual(['teste'])
+      expect(taskInDatabase?.members).toEqual(['teste'])
     })
   })
   describe('When operation successfully removes a member', () => {
@@ -65,7 +65,7 @@ describe('Tasks updateMembers endpoint integration tests', () => {
     it('Should have updated members in the database collection', async () => {
       const taskInDatabase = await taskModel.findById(taskId)
 
-      expect(taskInDatabase!.members).toEqual([])
+      expect(taskInDatabase?.members).toEqual([])
     })
   })
 
