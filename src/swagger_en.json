@@ -780,7 +780,8 @@
             "type": "string"
           },
           "priority": {
-            "type": "integer"
+            "type": "integer",
+            "enum": [1, 2, 3, 4, 5]
           },
           "members": {
             "type": "array",
