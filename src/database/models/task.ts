@@ -14,7 +14,6 @@ const taskSchema = new Schema<TaskDocument>({
   tags: [String]
 }, {
   timestamps: true,
-  collection: 'tasks',
   versionKey: false
 })
 
