@@ -9,6 +9,8 @@ import { routersFactory } from './Factory'
 
 const app: Express = express() // Initialize express app
 
+app.disable('x-powered-by') // Disable x-powered-by header as a security measure to prevent information leaks
+
 app.use(express.json()) // Parse all JSON in incoming requests so they can be used as JS objects
 
 app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // API Healthcheck endpoint
