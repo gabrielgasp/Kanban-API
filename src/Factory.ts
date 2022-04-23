@@ -1,11 +1,8 @@
 import { Router } from 'express'
-import { taskModel } from './database'
-import { TasksRepository } from './repositories/TasksRepository'
+import { tasksRepository } from './repositories'
 import { TasksService, TasksController, TasksRouter } from './routes/tasks'
 import * as middlewares from './middlewares'
 import * as validators from './validators'
-
-const tasksRepository = new TasksRepository(taskModel)
 
 class RoutersFactory {
   public createTasksRouter (): Router {
