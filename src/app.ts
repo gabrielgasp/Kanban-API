@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocumentPt from './swagger_pt.json'
 import swaggerDocumentEn from './swagger_en.json'
 import { errorHandler } from './middlewares'
-import { routersFactory } from './Factory'
+import { tasksRouter } from './routes'
 
 const app: Express = express() // Initialize express app
 
@@ -15,7 +15,7 @@ app.use(express.json()) // Parse all JSON in incoming requests so they can be us
 
 app.get('/healthcheck', (_req, res) => res.status(200).send('API HEALTHY')) // API Healthcheck endpoint
 
-app.use('/tasks', routersFactory.createTasksRouter()) // Mount the tasks router
+app.use('/tasks', tasksRouter) // Mount the tasks router
 
 const swaggerOptions = { customSiteTitle: 'Mamboo Kanban API Docs' }
 app.use('/docs/pt', swaggerUi.serveFiles(swaggerDocumentPt), swaggerUi.setup(swaggerDocumentPt, swaggerOptions)) // Apply swagger to route /docs/pt for interactive documentation in portuguese.
