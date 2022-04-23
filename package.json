@@ -60,6 +60,8 @@
     "joi": "^17.6.0",
     "mongoose": "^6.2.11",
     "mongoose-paginate-v2": "^1.6.3",
-    "swagger-ui-express": "^4.3.0"
+    "reflect-metadata": "^0.1.13",
+    "swagger-ui-express": "^4.3.0",
+    "tsyringe": "^4.6.0"
   }
 }
