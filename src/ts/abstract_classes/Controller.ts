@@ -5,7 +5,7 @@ import { IController, IService } from '../interfaces'
 // It is responsible to call the service and return the correct status code and data
 // to the client according to the result of the operation.
 // The controller has no knowledge of the database or business logic behind your application.
-export abstract class Controller<T> implements IController {
+export abstract class AbstractController<T> implements IController {
   constructor (
     protected service: IService<T> // Here we expect a service that follows the generic T interface to be injected.
   ) {

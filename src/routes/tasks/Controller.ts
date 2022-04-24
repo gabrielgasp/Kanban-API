@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Controller } from '../../ts/abstract_classes'
+import { AbstractController } from '../../ts/abstract_classes'
 import { ITask, ITasksController } from '../../ts/interfaces'
 import { ITasksService } from '../../ts/interfaces/routes/tasks/Service'
 
@@ -7,7 +7,7 @@ import { ITasksService } from '../../ts/interfaces/routes/tasks/Service'
 // It has the same methods as the abstract Controller class, but it uses a "TasksService" instance
 // provided as argument to the constructor;
 // If needed, we can add additional methods or override the ones from the abstract class (polymorphism).
-export class TasksController extends Controller<ITask> implements ITasksController {
+export class TasksController extends AbstractController<ITask> implements ITasksController {
   // We need to specify a constructor for the TasksController class that will receive a service that follows ITasksService interface.
   // This is because we need to use the methods that do not exist in the abstract (generic) service.
   // If we don't specify a constructor, the "updateMembers" method will be undefined.
