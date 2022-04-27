@@ -1,4 +1,4 @@
-import { taskModel } from "../../../../src/database"
+import { taskModel } from "../../../../src/database/mongodb"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
 const mockTasksModel = taskModel

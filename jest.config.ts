@@ -29,7 +29,7 @@ export default {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "src/server.ts",
-    "src/database/connection.ts",
+    "src/database/mongodb/connection.ts",
     "src/ts"
   ],
 

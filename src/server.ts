@@ -1,4 +1,4 @@
-import { connectToDatabase } from './database'
+import { connectToDatabase } from './database/mongodb'
 import { app } from './app'
 
 const PORT = process.env.PORT ?? 3001

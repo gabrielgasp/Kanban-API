@@ -1,4 +1,4 @@
-import { taskModel } from '../database'
+import { taskModel } from '../database/mongodb'
 import { TasksRepository } from './TasksRepository'
 
 export const tasksRepository = new TasksRepository(taskModel)

@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { taskModel } from '../../../src/database'
-import tasksSeed from '../../../src/database/tasksSeed.json'
+import { taskModel } from '../../../src/database/mongodb'
+import tasksSeed from '../../../src/database/mongodb/tasksSeed.json'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'

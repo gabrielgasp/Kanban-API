@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { taskModel } from '../../../src/database'
+import { taskModel } from '../../../src/database/mongodb'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks/board'
