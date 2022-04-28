@@ -1,9 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database/mongodb'
+import { redis } from '../../../src/database/redis'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'
+
+// Here I replace the ioredis import with ioredis-mock library that runs in-memory just like mongodb-memory-server.
+jest.mock('ioredis', () => require('ioredis-mock'))
 
 const task = {
   boardId: 1,
@@ -27,19 +31,27 @@ describe('Tasks Delete endpoint integration tests', () => {
   afterAll(async () => {
     await mongoose.connection.close() // Here we close the connection to the mongoDB instance in memory
     await mongod.stop() // Here we stop the mongoDB instance in memory
+    redis.disconnect() // Here we disconnect the redis client
   })
 
   describe('When operation is successful', () => {
     let taskId: string
+    const redisKey = `${taskModel.modelName}:test`
 
     beforeAll(async () => {
-      const { _id } = await taskModel.create(task)
+      const [{ _id }] = await Promise.all([ // Run both operation in parallel for better performance
+        taskModel.create(task), // Insert a task to be deleted
+        redis.set(redisKey, 'test') // Here we set a value in redis so we can test if it was cleared after request
+      ])
       taskId = _id
     })
 
-    it('Should 200 with deleted task data', async () => {
+    it('Should 200 with deleted task data and clear redis cache', async () => {
+      expect(await redis.get(redisKey)).toBe('test') // Here we check if the value was set in redis before the request
+
       const { status, body } = await fetchEndpoint(`${endpoint}/${taskId}`, { method: 'delete' })
 
+      expect(await redis.get(redisKey)).toBeNull() // Here we check if the cache was cleared after the request
       expect(status).toBe(200)
       expect(body).toMatchObject(task)
       expect(body).toHaveProperty('_id')
