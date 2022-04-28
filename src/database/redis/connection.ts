@@ -2,7 +2,7 @@ import Redis from 'ioredis'
 
 const redisOptions = process.env.REDIS_URL
   ? { path: process.env.REDIS_URL } // used for heroku
-  : { host: process.env.REDIS_HOST } // used for docker-compose or localhost:6379 if no env var is set.
+  : { host: process.env.REDIS_HOST } // used for docker-compose or defaults to 'localhost' if no env var is set.
 
 export const redis = new Redis(redisOptions)
 
