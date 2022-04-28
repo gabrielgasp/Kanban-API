@@ -1,9 +1,9 @@
+import Redis from "ioredis"
 import { taskModel } from "../../../../src/database/mongodb"
-import { redis } from "../../../../src/database/redis"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
 const mockTasksModel = taskModel
-const mockRedis = {} as jest.Mocked<typeof redis>
+const mockRedis = {} as jest.Mocked<Redis>
 const tasksRepository = new TasksRepository(mockTasksModel, mockRedis)
 
 const fakeDeletedTask = {
