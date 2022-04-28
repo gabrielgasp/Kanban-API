@@ -8,19 +8,32 @@ services:
     container_name: mk-api
     restart: always
     depends_on:
-      db:
+      mongo:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     ports:
       - "3001:3001" # <--- Caso queira usar uma porta diferente, altere o número da esquerda.
     environment:
-      - MONGO_URI=mongodb://db/mamboo-kanban-api
+      - MONGO_URI=mongodb://mongo/mamboo-kanban-api
+      - REDIS_HOST=redis
 
-  db:
+  mongo:
     image: mongo:5.0.7
-    container_name: mk-db
+    container_name: mk-mongo
     restart: always
     healthcheck:
       test: echo 'db.runCommand({serverStatus:1}).ok' | mongo --quiet | grep 1
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: redis:6.2.6
+    container_name: mk-redis
+    restart: always
+    healthcheck:
+      test: echo "PING" | redis-cli --pipe
       timeout: 5s
       retries: 5
       start_period: 5s
