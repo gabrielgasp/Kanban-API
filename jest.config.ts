@@ -30,6 +30,7 @@ export default {
     "/node_modules/",
     "src/server.ts",
     "src/database/mongodb/connection.ts",
+    "src/database/redis/connection.ts",
     "src/ts"
   ],
 
