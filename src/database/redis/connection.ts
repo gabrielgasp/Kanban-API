@@ -1,6 +1,10 @@
 import Redis from 'ioredis'
 
-export const redis = new Redis() // Here we instantiate the redis client and export in a singleton pattern.
+const redisOptions = process.env.REDIS_URL
+  ? { path: process.env.REDIS_URL } // used for heroku
+  : { host: process.env.REDIS_HOST } // used for docker-compose or localhost:6379 if no env var is set.
+
+export const redis = new Redis(redisOptions)
 
 redis.on('connect', () => {
   console.log('Redis connection established')
