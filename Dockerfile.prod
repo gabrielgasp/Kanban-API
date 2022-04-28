@@ -6,7 +6,6 @@ ENV NODE_ENV=production
 RUN yarn
 COPY . .
 RUN yarn build
-RUN npm prune --production
 
 # PRODUCTION STAGE
 FROM node:16-alpine AS prod
