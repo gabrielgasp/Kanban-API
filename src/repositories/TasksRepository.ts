@@ -36,7 +36,7 @@ export class TasksRepository extends AbstractRepository<ITask> implements ITasks
       this.model.findByIdAndUpdate(id, { [operation]: { members: value } }, { new: true }),
       this.redis.keys(`${this.model.modelName}:*`) // Here I get all redis keys that match the model name.
     ])
-    if (redisKeys.length) void this.redis.del(redisKeys) // Here I delete all the keys that match the model name (if any). This is necessary so that the next time we read the data, we get the updated data.
+    if (dbResponse && redisKeys.length) void this.redis.del(redisKeys) // Here I delete all the keys that match the model name (if any). This is necessary so that the next time we read the data, we get the updated data.
     return dbResponse
   }
 
@@ -46,7 +46,7 @@ export class TasksRepository extends AbstractRepository<ITask> implements ITasks
       this.model.findByIdAndUpdate(id, { [operation]: { tags: value } }, { new: true }),
       this.redis.keys(`${this.model.modelName}:*`)
     ])
-    if (redisKeys.length) void this.redis.del(redisKeys)
+    if (dbResponse && redisKeys.length) void this.redis.del(redisKeys)
     return dbResponse
   }
 }

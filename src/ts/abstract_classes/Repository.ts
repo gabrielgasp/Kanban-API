@@ -48,7 +48,7 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
       this.model.findByIdAndUpdate(id, data, { new: true }),
       this.redis.keys(`${this.model.modelName}:*`)
     ])
-    if (redisKeys.length) void this.redis.del(redisKeys)
+    if (dbResponse && redisKeys.length) void this.redis.del(redisKeys)
     return dbResponse
   }
 
@@ -57,7 +57,7 @@ export abstract class AbstractRepository<T> implements IRepository<T> {
       this.model.findByIdAndDelete(id),
       this.redis.keys(`${this.model.modelName}:*`)
     ])
-    if (redisKeys.length) void this.redis.del(redisKeys)
+    if (dbResponse && redisKeys.length) void this.redis.del(redisKeys)
     return dbResponse
   }
 }
