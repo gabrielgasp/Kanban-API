@@ -4,7 +4,7 @@
   "description": "",
   "main": "./build/server.js",
   "scripts": {
-    "test": "jest --maxWorkers=50% --passWithNoTests --silent --noStackTrace --coverage",
+    "test": "jest --runInBand --passWithNoTests --silent --noStackTrace --coverage",
     "test:verbose": "jest --runInBand --verbose --noStackTrace --coverage",
     "test:unit": "npm test -- -c jest-unit-config.ts",
     "test:integration": "npm test -- -c jest-integration-config.ts",
