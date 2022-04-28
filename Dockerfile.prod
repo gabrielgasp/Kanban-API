@@ -1,7 +1,7 @@
 # BUILD STAGE
 FROM node:16-alpine AS build
 WORKDIR /app
-COPY package*.json ./
+COPY package.json yarn.lock ./
 ENV NODE_ENV=production
 RUN yarn
 COPY . .
