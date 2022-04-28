@@ -1,9 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database/mongodb'
+import { redis } from '../../../src/database/redis'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'
+
+// Here I replace the ioredis import with ioredis-mock library that runs in-memory just like mongodb-memory-server.
+jest.mock('ioredis', () => require('ioredis-mock'))
 
 const newTask = {
   boardId: 1,
@@ -27,6 +31,7 @@ describe('Tasks Create endpoint integration tests', () => {
   afterAll(async () => {
     await mongoose.connection.close() // Here we close the connection to the mongoDB instance in memory
     await mongod.stop() // Here we stop the mongoDB instance in memory
+    redis.disconnect() // Here we disconnect the redis client
   })
 
   describe('When operation is successful', () => {
@@ -80,6 +85,16 @@ describe('Tasks Create endpoint integration tests', () => {
       tasks.forEach(({_id}) => {
         expect(createdTasksIds).toContain(_id.toString())
       })
+    })
+
+    it('Should clear redis cache if exists', async () => {
+      const redisKey = `${taskModel.modelName}:test`
+
+      await redis.set(redisKey, 'test') // Here we set a value in redis so we can test if it's cleared after the task is created
+
+      expect(await redis.get(redisKey)).toBe('test') // Check if the value is set before request
+      await fetchEndpoint(endpoint, { method: 'post', body: newTask })
+      expect(await redis.get(redisKey)).toBeNull() // Check if the value is cleared after request
     })
   })
 
