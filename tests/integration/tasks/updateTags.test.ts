@@ -1,9 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database/mongodb'
+import { redis } from '../../../src/database/redis'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks'
+
+// Here I replace the ioredis import with ioredis-mock library that runs in-memory just like mongodb-memory-server.
+jest.mock('ioredis', () => require('ioredis-mock'))
 
 let task = {
   boardId: 1,
@@ -32,6 +36,7 @@ describe('Tasks updateTags endpoint integration tests', () => {
   afterAll(async () => {
     await mongoose.connection.close() // Here we close the connection to the mongoDB instance in memory
     await mongod.stop() // Here we stop the mongoDB instance in memory
+    redis.disconnect() // Here we disconnect the redis client
   })
 
   describe('When operation successfully adds a tag', () => {
@@ -67,6 +72,16 @@ describe('Tasks updateTags endpoint integration tests', () => {
       const taskInDatabase = await taskModel.findById(taskId)
 
       expect(taskInDatabase?.tags).toEqual([])
+    })
+
+    it('Should clear redis cache if exists', async () => {
+      const redisKey = `${taskModel.modelName}:test`
+
+      await redis.set(redisKey, 'test') // Here we set a value in redis so we can test if it's cleared after the task is created
+
+      expect(await redis.get(redisKey)).toBe('test') // Check if the value is set before request
+      await fetchEndpoint(`${endpoint}/${taskId}/tags`, { method: 'patch', body: { operation: -1, value: 'teste' } }) // Here we make the request
+      expect(await redis.get(redisKey)).toBeNull() // Check if the value is cleared after request
     })
   })
 
