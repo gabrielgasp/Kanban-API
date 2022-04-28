@@ -1,9 +1,13 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database/mongodb'
+import { redis } from '../../../src/database/redis'
 import { fetchEndpoint } from '../__helpers__'
 
 const endpoint = '/tasks/board'
+
+// Here I replace the ioredis import with ioredis-mock library that runs in-memory just like mongodb-memory-server.
+jest.mock('ioredis', () => require('ioredis-mock'))
 
 const tasks = [
   {
@@ -35,10 +39,16 @@ describe('Tasks readFromBoard endpoint integration tests', () => {
     await mongoose.connect(uri) // Here we connect to the mongoDB instance in memory so our application can use it
     await taskModel.insertMany(tasks)
   })
-  
+
+  beforeEach(async () => { // Here I clear the redis cache before each test. We will test cache in the last test.
+    const redisKeys = await redis.keys('*')
+    if (redisKeys.length) await redis.del(redisKeys)
+  })
+
   afterAll(async () => {
     await mongoose.connection.close() // Here we close the connection to the mongoDB instance in memory
     await mongod.stop() // Here we stop the mongoDB instance in memory
+    redis.disconnect() // Here we disconnect the redis client
   })
 
   describe('When there are tasks in the collection for the boardId provided', () => {
@@ -74,6 +84,25 @@ describe('Tasks readFromBoard endpoint integration tests', () => {
 
       expect(status).toBe(500)
       expect(body.message).toBe('Something went wrong here, please try again later')
+    })
+  })
+
+  describe('When using redis to get cached data', () => {
+    it('Should 200 with response from cache', async () => {
+      const redisKey = `${taskModel.modelName}:1`
+
+      expect(await redis.exists(redisKey)).toBe(0) // Check that there is no cache from other tests
+
+      await fetchEndpoint(`${endpoint}/1`) // First request to create a cache
+      expect(await redis.exists(redisKey)).toBe(1) // Check if cache was created
+
+      const cachedData = JSON.parse(await redis.get(redisKey) as string) // Get cached data from redis to compare
+      expect(cachedData).not.toBeNull() // Check that cache was created
+
+      const { status, body } = await fetchEndpoint(`${endpoint}/1`) // Second request to get cached data
+
+      expect(status).toBe(200)
+      expect(body.docs).toEqual(cachedData.docs) // Make sure we are getting the same documents stored in redis
     })
   })
 })
