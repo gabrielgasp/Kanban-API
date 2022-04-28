@@ -1,5 +1,7 @@
 import { fetchEndpoint } from './__helpers__'
 
+jest.mock('ioredis', () => require('ioredis-mock')) // Necessary so that we can run this tests without a redis server running.
+
 describe('Send a GET request to /docs endpoints to make sure they are alive', () => {
   it('Should 200 with /docs/pt', async () => {
     const result = await fetchEndpoint('/docs/pt')
