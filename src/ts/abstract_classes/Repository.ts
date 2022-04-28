@@ -1,4 +1,4 @@
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
 import { PaginateModel, Document, PaginateResult } from 'mongoose'
 import { IRepository } from '../interfaces'
 
