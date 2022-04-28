@@ -5,7 +5,10 @@ import { TasksRepository } from "../../../../src/repositories/TasksRepository";
 
 export class MockTasksRepository extends TasksRepository {
   constructor () {
-    super({} as any) // I don't need to pass the real tasksModel because we will not use it
+    super(
+      {} as any, // I don't need to pass the real tasksModel because we will not use it
+      {} as any // I don't need to pass the real redis because we will not use it
+    ) 
   }
 
   // Here I override all methods from the original TasksRepository class
