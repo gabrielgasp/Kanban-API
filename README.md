@@ -128,8 +128,6 @@ Obs: Node e MongoDB utilizados no desenvolvimento e execução deste projeto est
 
 Esta aplicação conta com `37 suítes de teste` com mais de `180 testes`, sendo eles unitários e de integração, provendo uma cobertura de `100%` em todos os arquivos testáveis. Este desenvolvimento orientado a testes combinado aos `git hooks` utlizando [Husky](https://github.com/typicode/husky), integração contínua (CI) utilizando `GitHub Actions` e entrega contínua (CD) utilizando o `GitHub Integration` do [Heroku](https://devcenter.heroku.com/articles/github-integration) garantem alta confiabilidade no deploy desta API para produção.
 
-***Obs: No decorrer do desenvolvimento desta aplicação a entrega contínua (CD) foi interrompida devido uma brecha de segurança na integração entre as plataformas `Heroku` e `GitHub` (mais detalhes [aqui](https://status.heroku.com/incidents/2413)). O deploy da aplicação continuou sendo realizado através do Heroku CLI e a confiabilidade se manteve através dos `git hooks`.***
-
   <details>
   <summary><b>Rodando os testes</b></summary><br>
     
