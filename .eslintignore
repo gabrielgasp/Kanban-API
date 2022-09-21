@@ -1,7 +1,7 @@
 node_modules
 build
 tests
-jest*
+vitest*
 coverage
 src/swagger_pt.json
 src/swagger_en.json
