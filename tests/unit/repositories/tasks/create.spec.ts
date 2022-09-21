@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { taskModel } from "../../../../src/database"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
@@ -16,7 +17,7 @@ const fakeTask = {
 
 describe("TasksRepository create method unit tests", () => {
   beforeAll(() => { // mock the return value of the taskModel.create method
-    mockTasksModel.create = jest.fn().mockResolvedValue({ ...fakeTask, _id: 'test' })
+    mockTasksModel.create = vi.fn().mockResolvedValue({ ...fakeTask, _id: 'test' })
   })
 
   it("should call the create method of the model with data received as argument", async () => {

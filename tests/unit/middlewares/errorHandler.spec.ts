@@ -1,15 +1,16 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Request, Response, NextFunction } from 'express'
 import { errorHandler } from '../../../src/middlewares'
 
 describe('errorHandler middleware unit tests', () => {
   const mockReq = {} as Request
   const mockRes = {} as Response
-  const mockNext = jest.fn() as NextFunction
+  const mockNext = vi.fn() as unknown as NextFunction
 
   beforeEach(() => {
-    mockRes.status = jest.fn().mockReturnValue(mockRes) // Just like the original res.status, this will return the response object
-    mockRes.json = jest.fn()
-    jest.spyOn(console, 'error').mockImplementation(() => null) // We mock the console.error method so that we can test without printing the error to the console
+    mockRes.status = vi.fn().mockReturnValue(mockRes) // Just like the original res.status, this will return the response object
+    mockRes.json = vi.fn()
+    vi.spyOn(console, 'error').mockImplementation(() => null) // We mock the console.error method so that we can test without printing the error to the console
   })
 
   describe('When receive an unexpected error', () => {

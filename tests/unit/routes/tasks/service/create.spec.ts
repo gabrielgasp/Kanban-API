@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { TasksService } from "../../../../../src/routes/tasks/Service"
 import { MockTasksRepository } from "../../../../__mocks__"
 
@@ -16,7 +17,7 @@ const fakeTask = {
 
 describe("TasksService create method unit tests", () => {
   beforeAll(() => { // mock the return value of the tasksRepository.create method
-    mockTasksRepository.create = jest.fn().mockResolvedValue({ ...fakeTask, _id: 'test' })
+    mockTasksRepository.create = vi.fn().mockResolvedValue({ ...fakeTask, _id: 'test' })
   })
 
   it("should call the create method of the repository with data received as argument", async () => {

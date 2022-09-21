@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { Request, Response } from 'express'
 import { TasksController } from "../../../../../src/routes/tasks/Controller"
 import { MockTasksService } from "../../../../__mocks__"
@@ -40,12 +41,12 @@ describe("TasksController read method unit tests", () => {
 
   beforeAll(() => {
     // mock the return value of the tasksService.read method
-    mockTasksService.read = jest.fn().mockResolvedValue(fakeTaskResponse)
+    mockTasksService.read = vi.fn().mockResolvedValue(fakeTaskResponse)
 
     // Just like the real express response object, here I'm mocking status method
     // to return theresponse object so that the json method can be chained with it.
-    mockRes.status = jest.fn().mockReturnValue(mockRes)
-    mockRes.json = jest.fn()
+    mockRes.status = vi.fn().mockReturnValue(mockRes)
+    mockRes.json = vi.fn()
   })
 
   mockReq.query = { page: '1', limit: '5' }

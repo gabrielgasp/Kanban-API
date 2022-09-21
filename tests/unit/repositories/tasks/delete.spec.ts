@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { taskModel } from "../../../../src/database"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
@@ -17,7 +18,7 @@ const fakeDeletedTask = {
 
 describe("TasksRepository delete method unit tests", () => {
   beforeAll(() => { // mock the return value of the taskModel.findByIdAndDelete method
-    mockTasksModel.findByIdAndDelete = jest.fn().mockResolvedValue(fakeDeletedTask)
+    mockTasksModel.findByIdAndDelete = vi.fn().mockResolvedValue(fakeDeletedTask)
   })
 
   it("should call the findByIdAndDelete method of the model with no arguments", async () => {

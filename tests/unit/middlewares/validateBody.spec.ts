@@ -1,15 +1,16 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { Request, Response } from "express"
 import { validateBody } from "../../../src/middlewares"
 
 describe('validateBody middleware unit test', () => {
   const mockReq = { body: {} } as Request
   const mockRes = {} as Response
-  const mockNext = jest.fn()
-  const mockBodyValidator = jest.fn()
+  const mockNext = vi.fn()
+  const mockBodyValidator = vi.fn()
 
   beforeAll(() => {
-    mockRes.status = jest.fn().mockReturnValue(mockRes)
-    mockRes.json = jest.fn()
+    mockRes.status = vi.fn().mockReturnValue(mockRes)
+    mockRes.json = vi.fn()
   })
 
   it('Should call bodyValidator function with req.body as argument', () => {

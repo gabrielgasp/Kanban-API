@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { Request, Response } from "express"
 import { validatePathId } from "../../../src/middlewares"
 import mongoose from "mongoose"
@@ -5,14 +6,14 @@ import mongoose from "mongoose"
 describe('validatePathId middleware unit test', () => {
   const mockReq = {} as Request
   const mockRes = {} as Response
-  const mockNext = jest.fn()
+  const mockNext = vi.fn()
 
   beforeAll(() => {
-    mockRes.status = jest.fn().mockReturnValue(mockRes)
-    mockRes.json = jest.fn()
+    mockRes.status = vi.fn().mockReturnValue(mockRes)
+    mockRes.json = vi.fn()
 
     // Here I'm mocking the isValidObjectId function from mongoose so I can control the return value
-    jest.spyOn(mongoose, 'isValidObjectId')
+    vi.spyOn(mongoose, 'isValidObjectId')
       .mockReturnValueOnce(true) // First call
       .mockReturnValueOnce(true) // Second call
       .mockReturnValueOnce(false) // Third call

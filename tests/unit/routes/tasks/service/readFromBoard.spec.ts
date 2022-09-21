@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { TasksService } from "../../../../../src/routes/tasks/Service"
 import { MockTasksRepository } from "../../../../__mocks__"
 
@@ -29,7 +30,7 @@ const fakeTaskResponse = [
 
 describe("TasksService readFromBoard method unit tests", () => {
   beforeAll(() => { // mock the return value of the tasksRepository.readFromBoard method
-    mockTasksRepository.readFromBoard = jest.fn().mockResolvedValue(fakeTaskResponse)
+    mockTasksRepository.readFromBoard = vi.fn().mockResolvedValue(fakeTaskResponse)
   })
 
   it("should call the readFromBoard method of the repository with boardId", async () => {

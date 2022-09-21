@@ -1,9 +1,10 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { updateTaskMembersOrTagsValidator, updateTaskMembersOrTagsSchema } from '../../../../src/validators'
 
 describe('updateTaskMembersOrTagsValidator unit tests', () => {
   beforeAll(() => {
     // Here I'm mocking the joi's schema validate method to control the validation result
-    jest.spyOn(updateTaskMembersOrTagsSchema, 'validate')
+    vi.spyOn(updateTaskMembersOrTagsSchema, 'validate')
       .mockReturnValueOnce({ error: 'error', value: 'value' } as any) // First call
       .mockReturnValueOnce({ error: undefined, value: 'value' } as any) // Second call
   })

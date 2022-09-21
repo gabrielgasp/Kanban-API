@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { fetchEndpoint } from './__helpers__'
 
 describe('Send a GET request to /healthcheck to make sure API is running', () => {

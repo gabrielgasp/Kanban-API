@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import { taskModel } from '../../../src/database'
@@ -246,7 +247,7 @@ describe('Tasks Create endpoint integration tests', () => {
     })
 
     it('Should 500 with message when an unexpected error occurs', async () => {
-      jest.spyOn(taskModel, 'create').mockRejectedValueOnce(new Error('Unexpected error') as never)
+      vi.spyOn(taskModel, 'create').mockRejectedValueOnce(new Error('Unexpected error') as never)
       const { status, body } = await fetchEndpoint(endpoint, { method: 'post', body: newTask })
 
       expect(status).toBe(500)

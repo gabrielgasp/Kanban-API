@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { taskModel } from "../../../../src/database"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
@@ -29,8 +30,8 @@ const fakeTaskResponse = [
 
 describe("TasksRepository readFromBoard method unit tests", () => {
   beforeAll(() => { // mock the return value of the taskModel.find method
-    mockTasksModel.find = jest.fn().mockReturnValue({
-      sort: jest.fn().mockResolvedValue(fakeTaskResponse)
+    mockTasksModel.find = vi.fn().mockReturnValue({
+      sort: vi.fn().mockResolvedValue(fakeTaskResponse)
     })
   })
 

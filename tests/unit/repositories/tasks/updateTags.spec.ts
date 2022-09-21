@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { taskModel } from "../../../../src/database"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
@@ -17,7 +18,7 @@ const fakeUpdatedTask = {
 
 describe("TasksRepository updateTags method unit tests", () => {
   beforeAll(() => { // mock the return value of the taskModel.findByIdAndUpdate method
-    mockTasksModel.findByIdAndUpdate = jest.fn()
+    mockTasksModel.findByIdAndUpdate = vi.fn()
       .mockResolvedValueOnce({ ...fakeUpdatedTask, tags: ['test'] }) // mock the first call
       .mockResolvedValueOnce({ ...fakeUpdatedTask, tags: ['test'] }) // mock the second call
       .mockResolvedValueOnce({ ...fakeUpdatedTask, tags: [] }) // mock the third call

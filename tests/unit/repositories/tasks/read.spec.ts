@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { taskModel } from "../../../../src/database"
 import { TasksRepository } from "../../../../src/repositories/TasksRepository"
 
@@ -37,7 +38,7 @@ const fakePaginationResponse = {
 
 describe("TasksRepository read method unit tests", () => {
   beforeAll(() => { // Here I'm mocking the model's paginate method used in the TasksRepository read method
-    mockTasksModel.paginate = jest.fn().mockResolvedValue(fakePaginationResponse)
+    mockTasksModel.paginate = vi.fn().mockResolvedValue(fakePaginationResponse)
   })
 
   it("should call the model paginate method with the expected arguments", async () => {

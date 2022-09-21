@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { TasksService } from "../../../../../src/routes/tasks/Service"
 import { MockTasksRepository } from "../../../../__mocks__"
 
@@ -17,7 +18,7 @@ const fakeDeletedTask = {
 
 describe("TasksRepository delete method unit tests", () => {
   beforeAll(() => { // mock the return value of the tasksRepository.delete method
-    mockTasksRepository.delete = jest.fn().mockResolvedValue(fakeDeletedTask)
+    mockTasksRepository.delete = vi.fn().mockResolvedValue(fakeDeletedTask)
   })
 
   it("should call the delete method of the repository with no arguments", async () => {
