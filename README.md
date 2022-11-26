@@ -4,19 +4,13 @@ Esta aplicação foi desenvolvida como teste técnico do processo seletivo para 
 
 Trata-se de uma API de tarefas de uma aplicação de quadro Kanban com 7 endpoints onde é possível realizar operações CRUD em um banco de dados MongoDB.
 
-Abaixo você encontra instruções sobre como consultar a documentação da API, como acessar a aplicação, testes da aplicação, tecnologias utilizadas e um diagrama da arquitetura implementada.
+Abaixo você encontra instruções sobre como consultar a documentação da API, como rodar a aplicação, testes da aplicação, tecnologias utilizadas e um diagrama da arquitetura implementada.
 
 ## Documentação da API
 
 A documentação de operação da API foi feita utilizando [Swagger](https://swagger.io/) e seguindo a [OAS3 (OpenAPI Specification 3.0)](https://swagger.io/specification/), e pode ser consultada de forma interativa através dos endpoints `/docs/pt` e `/docs/en` em português e inglês respectivamente.
 
 Além de explicar e exemplificar a utilização da API, as páginas ainda permitem testar os endpoints diretamente pela interface gráfica da documentação.
-
-## Acessando a aplicação em produção
-
-A aplicação pode ser acessada através de seu deploy na plataforma `Heroku`. Para isso basta clicar [aqui](https://mamboo-kanban-api.herokuapp.com/docs/pt/).
-
-A aplicação em produção utiliza um banco de dados `MongoDB Atlas` hospedado pela AWS em São Paulo.
 
 ## Rodando localmente
 
@@ -126,7 +120,7 @@ Obs: Node e MongoDB utilizados no desenvolvimento e execução deste projeto est
 
 ## Testes
 
-Esta aplicação conta com `37 suítes de teste` com mais de `180 testes`, sendo eles unitários e de integração, provendo uma cobertura de `100%` em todos os arquivos testáveis. Este desenvolvimento orientado a testes combinado aos `git hooks` utlizando [Husky](https://github.com/typicode/husky), integração contínua (CI) utilizando `GitHub Actions` e entrega contínua (CD) utilizando o `GitHub Integration` do [Heroku](https://devcenter.heroku.com/articles/github-integration) garantem alta confiabilidade no deploy desta API para produção.
+Esta aplicação conta com `37 suítes de teste` com mais de `180 testes`, sendo eles unitários e de integração, provendo uma cobertura de `100%` em todos os arquivos testáveis. Este desenvolvimento orientado a testes combinado aos `git hooks` utlizando [Husky](https://github.com/typicode/husky) e CI/CD utilizando `GitHub Actions` garantem alta confiabilidade da aplicação.
 
   <details>
   <summary><b>Rodando os testes</b></summary><br>
