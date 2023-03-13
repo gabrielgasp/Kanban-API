@@ -1,4 +1,4 @@
-# Mamboo Kanban API
+# Kanban API
 
 Esta aplicação foi desenvolvida como teste técnico do processo seletivo para a vaga de desenvolvedor backend na empresa Mamboo.
 
